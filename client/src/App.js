@@ -1,5 +1,6 @@
 import axios from 'axios';
 import './App.css';
+import AppRouter from "./router/AppRouter";
 
 //models will be the string we send from our server
 const apiCall = () => {
@@ -16,6 +17,7 @@ const App = () => {
 
           <button onClick={apiCall}>Make API Call</button>
 
+            <AppRouter />
         </header>
       </div>
   );
