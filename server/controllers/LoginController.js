@@ -1,12 +1,20 @@
 const express = require('express');
 const router = express.Router();
+const { MongoClient } = require('mongodb');
+const uri = 'mongodb://localhost:27017/mydb';
+const bcrypt = require('bcrypt');
 
 router.post('/login', async (req, res) => {
+    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    const { username, password } = req.body;
+
     try {
-        const { username, password } = req.body;
+        await client.connect();
 
-        const user = await User.findOne({ username });
+        const database = client.db();
+        const usersCollection = database.collection('User');
 
+        const user = await usersCollection.findOne({ username });
         if (!user) {
             return res.status(401).json({ message: 'Invalid username or password' });
         }
