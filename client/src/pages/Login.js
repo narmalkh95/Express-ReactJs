@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const Login = () => {
+export const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     const handleLogin = async () => {
         try {
             const response = await axios.post('http://localhost:8080/login', { username, password });
-            console.log(response.data.message);
+            console.log(response);
         } catch (error) {
-            console.error('Login error:', error.response.data.message);
+            console.error('Login error:', error);
         }
     };
 

@@ -1,23 +1,13 @@
-import axios from 'axios';
 import './App.css';
 import AppRouter from "./router/AppRouter";
-
-//models will be the string we send from our server
-const apiCall = () => {
-    axios.get('http://localhost:8080/products').then((data) => {
-        //this console.log will be in our frontend console
-        console.log(data)
-    })
-}
+import Login from "./pages/Login";
 
 const App = () => {
   return (
       <div className="App">
         <header className="App-header">
+             <AppRouter />
 
-          <button onClick={apiCall}>Make API Call</button>
-
-            <AppRouter />
         </header>
       </div>
   );
