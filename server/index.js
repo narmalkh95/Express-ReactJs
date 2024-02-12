@@ -9,11 +9,11 @@ const PORT = process.env.PORT || 8080;
 
 require('./db');
 
-const productController = require('./controllers/productController');
+const classController = require('./controllers/classController');
 const qrController = require('./controllers/QRController');
 const loginController = require('./controllers/LoginController');
 app.use('/qr', qrController);
-app.use('/', productController);
+app.use('/', classController);
 
 app.post('/login', loginController);
 
