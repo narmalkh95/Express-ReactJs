@@ -3,9 +3,10 @@ const router = express.Router();
 const { MongoClient } = require('mongodb');
 const uri = 'mongodb://localhost:27017/mydb';
 const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
 
 router.post('/login', async (req, res) => {
-    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    const client = new MongoClient(uri);
     const { username, password } = req.body;
 
     try {
@@ -25,7 +26,9 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ message: 'Invalid username or password' });
         }
 
-        res.json({ message: 'Login successful' });
+        const token = jwt.sign({ userId: user._id }, 'secret', { expiresIn: '1h' });
+
+        res.json({ message: 'Login successful', token });
 
     } catch (error) {
         console.error('Error during login:', error);

@@ -3,7 +3,7 @@ import QRCodeGenerator from "../components/QRCodeGenerator/QRCodeGenerator";
 import ClassTable from "../components/ClassTable/ClassTable";
 
 
-const Home = () => {
+const Dashboard = () => {
     return (
         <div>
            <QRCodeGenerator/>
@@ -12,4 +12,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default Dashboard;

@@ -1,12 +1,14 @@
 import AppRouter from "./router/AppRouter";
+import AppLayout from "./layout/AppLayout";
 
 const App = () => {
   return (
       <div className="App">
-        <header className="App-header">
+
+
              <AppRouter />
-        </header>
-      </div>
+
+       </div>
   );
 }
 

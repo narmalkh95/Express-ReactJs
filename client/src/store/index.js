@@ -3,12 +3,14 @@ import { authApi } from '../features/authApi';
 import { qrApi } from '../features/qrApi';
 import {classApi} from "../features/classApi";
 import { setupListeners } from '@reduxjs/toolkit/query';
+import authSlice from "../slice/authSlice";
 
  export const store = configureStore({
     reducer: {
         [authApi.reducerPath]: authApi.reducer,
         [qrApi.reducerPath]: qrApi.reducer,
         [classApi.reducerPath]: classApi.reducer,
+        auth: authSlice.reducer,
     },
     middleware: (getDefaultMiddleware) => {
          return getDefaultMiddleware().concat(authApi.middleware, qrApi.middleware, classApi.middleware);

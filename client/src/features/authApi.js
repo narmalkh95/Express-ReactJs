@@ -1,4 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import {setError, setLoading} from "../slice/authSlice";
+import {setToken} from "../helpers/auth";
+
 export const authApi = createApi({
     reducerPath: 'authApi',
     baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8080' }),
@@ -10,8 +13,20 @@ export const authApi = createApi({
                 body: { username, password },
             }),
         }),
+        onSuccess: (data, { dispatch }) => {
+            console.log(data,'koko')
+            const { token } = data;
+            setToken(token);
+            dispatch(setLoading(false));
+        },
+        onError: (error, { dispatch }) => {
+            dispatch(setError(error.message));
+        },
+        getUserData: builder.query({
+            query: () => '/user',
+        }),
     }),
 });
 
-export const { useLoginMutation } = authApi
+export const { useLoginMutation, useGetUserDataQuery  } = authApi
 
