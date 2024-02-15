@@ -3,6 +3,9 @@ import {useLoginMutation} from "../../features/authApi";
 import {useNavigate} from 'react-router-dom';
 
 import styles from './login.module.css';
+import {setToken} from "../../helpers/auth";
+import {setLoading, setLoginSuccess} from "../../slice/authSlice";
+import {useDispatch} from "react-redux";
 
 const {loginForm, inputField, loginButton} = styles;
 
@@ -10,23 +13,25 @@ const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const [login, {data, isSuccess,isError, isLoading, error}] = useLoginMutation();
 
     const handleLogin = async () => {
         try {
-            await login({username, password});
+            login({username, password}).then(data => {
+                const { token } = data?.data || {};
+
+                if (token) {
+                    setToken(token);
+                    navigate('/dashboard');
+                    dispatch(setLoginSuccess());
+                }
+            });
         } catch (error) {
             console.error('Login error:', error);
         }
     };
-
-    useEffect(() => {
-        if (isSuccess) {
-            navigate('/dashboard');
-        }
-
-    }, [isSuccess])
 
     return (
 

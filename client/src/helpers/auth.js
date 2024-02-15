@@ -1,3 +1,6 @@
+import {logout} from "../slice/authSlice";
+import {fetchBaseQuery} from "@reduxjs/toolkit/query/react";
+
 export const isAuthenticated = () => {
     return !!getToken();
 };
@@ -13,3 +16,22 @@ export const getToken = () => {
 export const removeToken = () => {
     localStorage.removeItem('token');
 };
+
+const baseQuery = fetchBaseQuery({ baseUrl: 'http://localhost:8080', prepareHeaders: (headers, { getState }) => {
+        const token = getToken();
+        // If we have a token set in state, let's assume that we should be passing it.
+        if (token) {
+            headers.set('authorization', token)
+        }
+        return headers
+    },
+});
+
+export const baseQueryWithLogout = async (args, api, extraOptions) => {
+    debugger
+    let result = await baseQuery(args, api, extraOptions)
+    if (result.error && result.error.status === 401) {
+        api.dispatch(logout());
+    }
+    return result
+}

@@ -21,7 +21,7 @@ const PrivateRoute = ({ children, requiredRoles }) => {
         return <div>Loading...</div>;
     }
 
-    if (isAuthenticated) {
+    if (!isAuthenticated) {
         return <Navigate to="/login" replace />;
     }
 

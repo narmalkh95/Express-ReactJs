@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Class = require('../models/Class');
+const verifyToken = require('../middleware/authMiddleware');
 
 // Create class
 router.post('/class', (req, res) => {
@@ -12,7 +13,7 @@ router.post('/class', (req, res) => {
 });
 
 // Read all classes
-router.get('/class', (req, res) => {
+router.get('/class', verifyToken, (req, res) => {
     Class.find()
         .then((data) => res.json(data))
         .catch((err) => res.status(500).json(err));

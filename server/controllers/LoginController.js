@@ -4,26 +4,22 @@ const { MongoClient } = require('mongodb');
 const uri = 'mongodb://localhost:27017/mydb';
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
+const Users = require('../models/User');
 
 router.post('/login', async (req, res) => {
-    const client = new MongoClient(uri);
     const { username, password } = req.body;
 
     try {
-        await client.connect();
+        const user = await Users.findOne({username});
 
-        const database = client.db();
-        const usersCollection = database.collection('User');
-
-        const user = await usersCollection.findOne({ username });
         if (!user) {
-            return res.status(401).json({ message: 'Invalid username or password' });
+            return res.status(401).json({ message: 'Invalid username' });
         }
 
         const passwordMatch = await bcrypt.compare(password, user.password);
 
         if (!passwordMatch) {
-            return res.status(401).json({ message: 'Invalid username or password' });
+            return res.status(401).json({ message: 'Invalid password' });
         }
 
         const token = jwt.sign({ userId: user._id }, 'secret', { expiresIn: '1h' });
