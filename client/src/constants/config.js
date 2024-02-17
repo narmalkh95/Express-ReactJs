@@ -1,0 +1,1 @@
+export const SERVER_HOST_IP = '192.168.0.100:8080'

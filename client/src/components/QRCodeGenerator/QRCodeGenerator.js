@@ -1,10 +1,11 @@
  import QRCode from 'qrcode.react';
 import {getToken} from "../../helpers/auth";
+ import {SERVER_HOST_IP} from "../../constants/config";
 
 const QRCodeGenerator = () => {
     const token = getToken();
 
-    const qrData = `192.168.0.100:8080/qr/verify?token=${token}`;
+    const qrData = `${SERVER_HOST_IP}/qr/verify?token=${token}`;
 
 
     return (

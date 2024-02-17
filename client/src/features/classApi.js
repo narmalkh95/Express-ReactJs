@@ -1,9 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import {baseQueryWithLogout, getToken} from "../helpers/auth";
+import {SERVER_HOST_IP} from "../constants/config";
 export const classApi = createApi({
 	reducerPath: 'classApi',
 	// baseQuery: fetchBaseQuery({
-	baseUrl: 'http://192.168.0.100:8080' ,
+	baseUrl: SERVER_HOST_IP,
 	// 	prepareHeaders: (headers, { getState }) => {
 	// 			const token = getToken();
 	// 			// If we have a token set in state, let's assume that we should be passing it.

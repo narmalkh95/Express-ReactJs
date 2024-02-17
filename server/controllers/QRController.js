@@ -2,8 +2,12 @@ const express = require('express');
 const router = express.Router();
 const QRCode = require('qrcode');
 const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+dotenv.config();
 
 const Users = require("../models/User");
+
+const HOST = process.env.HOST_IP || 'localhost';
 
 
 router.get('/verify', async (req, res) => {
@@ -16,7 +20,9 @@ router.get('/verify', async (req, res) => {
         return res.status(401).json({ message: 'Invalid username' });
     }
 
-    res.redirect('http://192.168.0.100:3000/thank-you');
+    //@TODO check if the user late or in time to class and save in db
+
+    res.redirect(`http://${HOST}:3000/thank-you`);
 
 });
 

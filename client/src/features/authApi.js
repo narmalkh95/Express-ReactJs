@@ -1,10 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import {setError, setLoading} from "../slice/authSlice";
 import {setToken} from "../helpers/auth";
+import {SERVER_HOST_IP} from "../constants/config";
 
 export const authApi = createApi({
     reducerPath: 'authApi',
-    baseQuery: fetchBaseQuery({ baseUrl: 'http://192.168.0.100:8080' }),
+    baseQuery: fetchBaseQuery({ baseUrl: SERVER_HOST_IP}),
     endpoints: (builder) => ({
         login: builder.mutation({
             query: ({ username, password }) => ({
