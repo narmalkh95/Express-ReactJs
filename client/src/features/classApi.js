@@ -3,7 +3,7 @@ import {baseQueryWithLogout, getToken} from "../helpers/auth";
 export const classApi = createApi({
 	reducerPath: 'classApi',
 	// baseQuery: fetchBaseQuery({
-	// 	baseUrl: 'http://localhost:8080' ,
+	baseUrl: 'http://192.168.0.100:8080' ,
 	// 	prepareHeaders: (headers, { getState }) => {
 	// 			const token = getToken();
 	// 			// If we have a token set in state, let's assume that we should be passing it.

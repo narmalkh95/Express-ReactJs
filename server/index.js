@@ -1,7 +1,6 @@
 const express = require("express");
 const app = express();
 const cors = require('cors');
-// require('./fack');
 
 app.use(express.json());
 app.use(cors())
@@ -16,9 +15,11 @@ const loginController = require('./controllers/LoginController');
 app.use('/qr', qrController);
 app.use('/', classController);
 
+
+
 app.post('/login', loginController);
 
 
-app.listen(PORT, () => {
+app.listen(PORT, process.env.HOST_IP, () => {
     console.log(`Server is listening on port ${PORT}`);
 });

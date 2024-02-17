@@ -1,15 +1,16 @@
-import {useGenerateQRCodeQuery} from "../../features/qrApi";
+ import QRCode from 'qrcode.react';
+import {getToken} from "../../helpers/auth";
 
 const QRCodeGenerator = () => {
-    const { data, error, isLoading } = useGenerateQRCodeQuery({ userId:1, classroomId:1 });
+    const token = getToken();
 
-    if (isLoading) return <p>Loading QR code...</p>;
-    if (error) return <p>Error fetching QR code: {error.message}</p>;
+    const qrData = `192.168.0.100:8080/qr/verify?token=${token}`;
 
-     return (
+
+    return (
         <div>
-            <>QR</>
-            <img src={data.qrCode} alt="QR Code" />
+            <h2>QR Code</h2>
+             <QRCode value={qrData} />
         </div>
     );
 };

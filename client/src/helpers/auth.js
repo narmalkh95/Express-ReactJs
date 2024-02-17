@@ -28,7 +28,6 @@ const baseQuery = fetchBaseQuery({ baseUrl: 'http://localhost:8080', prepareHead
 });
 
 export const baseQueryWithLogout = async (args, api, extraOptions) => {
-    debugger
     let result = await baseQuery(args, api, extraOptions)
     if (result.error && result.error.status === 401) {
         api.dispatch(logout());

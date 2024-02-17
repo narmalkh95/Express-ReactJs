@@ -4,7 +4,7 @@ import {setToken} from "../helpers/auth";
 
 export const authApi = createApi({
     reducerPath: 'authApi',
-    baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8080' }),
+    baseQuery: fetchBaseQuery({ baseUrl: 'http://192.168.0.100:8080' }),
     endpoints: (builder) => ({
         login: builder.mutation({
             query: ({ username, password }) => ({
@@ -14,8 +14,7 @@ export const authApi = createApi({
             }),
         }),
         onSuccess: (data, { dispatch }) => {
-            console.log(data,'koko')
-            const { token } = data;
+             const { token } = data;
             setToken(token);
             dispatch(setLoading(false));
         },
