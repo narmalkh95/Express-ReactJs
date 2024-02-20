@@ -10,17 +10,20 @@ const HOST = process.env.HOST_IP || 'localhost';
 
 require('./db');
 
-const classController = require('./controllers/classController');
+// const classController = require('./controllers/classController');
 const qrController = require('./controllers/QRController');
 const loginController = require('./controllers/LoginController');
+
+const classRoutes = require('./routs/classRoutes');
+
 app.use('/qr', qrController);
-app.use('/', classController);
+// app.use('/', classController);
 
-
+app.use('/test', classRoutes)
 
 app.post('/login', loginController);
 
 
-app.listen(PORT, process.env.HOST_IP, () => {
+app.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}`);
 });
