@@ -3,9 +3,10 @@ const router = express.Router();
 const QRCode = require('qrcode');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
+const Users = require("../models/User");
 dotenv.config();
 
-const Users = require("../models/User");
+
 
 const HOST = process.env.HOST_IP || 'localhost';
 
