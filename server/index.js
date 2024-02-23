@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require('cors');
-
+// require('./fack');
 app.use(express.json());
 app.use(cors())
 
@@ -10,14 +10,14 @@ const HOST = process.env.HOST_IP || 'localhost';
 
 require('./db');
 
-// const classController = require('./controllers/classController');
+const classController = require('./controllers/classController');
 const qrController = require('./controllers/QRController');
 const loginController = require('./controllers/LoginController');
 
 const classRoutes = require('./routs/classRoutes');
 
 app.use('/qr', qrController);
-// app.use('/', classController);
+app.use('/', classController);
 
 app.use('/test', classRoutes)
 

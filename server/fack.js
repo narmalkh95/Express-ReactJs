@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const User = require('./models/User');
+const {ROLES} = require("./models/User");
 
 const uri = 'mongodb://localhost:27017/mydb';
 
@@ -8,6 +9,7 @@ const uri = 'mongodb://localhost:27017/mydb';
 const fakeUser = {
     username: 'fakeuser',
     password: 'fakepassword',
+    role: ROLES.ADMIN
 };
 
 async function createFakeUser() {

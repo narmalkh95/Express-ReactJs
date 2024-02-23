@@ -4,7 +4,14 @@ const bcrypt = require('bcrypt');
 const userSchema = new mongoose.Schema({
     username: String,
     password: String,
+    role: String,
 });
+
+const ROLES = {
+    ADMIN: "ADMIN",
+    SUPERVISOR: "SUPERVISOR",
+    USER: 'USER'
+}
 
 userSchema.pre('save', async function (next) {
     const user = this;
@@ -18,3 +25,4 @@ userSchema.pre('save', async function (next) {
 
 
 module.exports = mongoose.model('User', userSchema);
+module.exports.ROLES = ROLES;
