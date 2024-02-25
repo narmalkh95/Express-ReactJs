@@ -6,7 +6,7 @@ import ClassTable from "../components/ClassTable/ClassTable";
 const Dashboard = () => {
     return (
         <div>
-           <QRCodeGenerator/>
+            <QRCodeGenerator/>
             <ClassTable/>
         </div>
     );
