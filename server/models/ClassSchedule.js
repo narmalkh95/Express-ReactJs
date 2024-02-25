@@ -3,6 +3,8 @@ const Room = require('./Room');
 const Teacher = require('./Teacher');
 const Student = require('./Student');
 const ClassTypes = require('./ClassType');
+const {ro} = require("faker/lib/locales");
+const {availableWeekDays, availableTimeslots} = require('../constants/index')
 
 async function getClassSchedule() {
     try {
@@ -10,16 +12,10 @@ async function getClassSchedule() {
             .populate('lessonSchedule.teacher')
             .populate('lessonSchedule.room')
             .populate('lessonSchedule.classType')
-            // .populate('teachers')
-            // .populate('students');
 
-        const schedule = {
-            Monday: {},
-            Tuesday: {},
-            Wednesday: {},
-            Thursday: {},
-            Friday: {},
-        };
+        const schedule = {};
+
+        Object.values(availableWeekDays).map(v => schedule[v] = {});
 
         groups.forEach(group => {
             group.lessonSchedule.forEach(lesson => {
@@ -38,7 +34,7 @@ async function getClassSchedule() {
                     // students: studentNames,
                 };
 
-                if (schedule[dayOfWeek][timeSlot]) {
+                if (schedule?.[dayOfWeek]?.[timeSlot]) {
                     schedule[dayOfWeek][timeSlot].push(obj)
                 } else {
                     schedule[dayOfWeek][timeSlot] = [obj]
@@ -52,4 +48,32 @@ async function getClassSchedule() {
     }
 }
 
-module.exports = { getClassSchedule };
+const getClassCreateParams = async() => {
+    const room = await Room.find().populate();
+    const teachers = await Teacher.find().populate();
+    const classTypes = await ClassTypes.find().populate();
+    const group = await Group.find().populate();
+
+    return {
+        group: group.map(i => {
+            return {value: i._id, label: i.name}
+        }),
+        teacher: teachers.map(i => {
+            return {value: i._id, label: i.name}
+        }),
+        room: room.map(i => {
+            return {value: i._id, label: i.name}
+        }),
+        classType: classTypes.map(i => {
+            return {value: i._id, label: i.name}
+        }),
+        timeSlot: availableTimeslots.map(i => {
+            return {value: i, label: i}
+        }),
+        dayOfWeek: Object.values(availableWeekDays).map(i => {
+            return {value: i, label: i}
+        })
+    }
+}
+
+module.exports = { getClassSchedule, getClassCreateParams };

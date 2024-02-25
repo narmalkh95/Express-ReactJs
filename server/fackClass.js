@@ -5,16 +5,7 @@ const Room = require('./models/Room');
 const Teacher = require('./models/Teacher');
 const Student = require('./models/Student');
 const ClassType = require('./models/ClassType');
-
-const availableTimeslots = ['9:30 - 10:50', '11:00 - 12:20', '12:50 - 14:10', '14:20 - 15:40'];
-
-const availableWeekDays = {
-    monday: 'Monday',
-    tuesday: 'Tuesday',
-    wednesday: 'Wednesday',
-    thursday: 'Thursday',
-    friday: 'Friday',
-};
+const {availableWeekDays, availableTimeslots} = require('./constants/index')
 
 async function generateMockData() {
     try {

@@ -21,7 +21,7 @@ const columns = [
 	...weekDays.map(day => {
 		return {
 			title: day[1],
-			dataIndex: day[0],
+			dataIndex: day[1],
 			key: day[0]
 		}
 	})
@@ -55,7 +55,7 @@ const ClassTable = () => {
 			}
 
 			weekDays.map(weekDay => {
-				obj[weekDay[0]] = data?.[weekDay[0]]?.[lessonTime]?.map(renderTableItem)
+				obj[weekDay[1]] = data?.[weekDay[1]]?.[lessonTime]?.map(renderTableItem)
 			})
 
 			return obj
@@ -67,7 +67,7 @@ const ClassTable = () => {
 		<div>
 			<div>
 				<Button type="primary" onClick={() => setIsLessonModalOpen(true)}>
-					Create New Lesson
+					Ստեղծել նոր դասաժամ
 				</Button>
 
 				<CreateNewLesson
