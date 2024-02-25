@@ -38,7 +38,8 @@ const ClassTable = () => {
 	const renderTableItem = useCallback((i, index) => {
 		return (
 			<p key={index}>
-				{i.groupName + ' '}
+				<span style={{textTransform: 'capitalize'}}>{i.groupName + ' '}</span>
+				<span style={{color: "gray"}}>{i.classType + ' '}</span>
 				<span style={{color: 'red'}}>{i.teacher + ' '}</span>
 				<span style={{color: 'purple'}}>{i.room}</span>
 			</p>
@@ -79,6 +80,7 @@ const ClassTable = () => {
 					<Table
 						dataSource={dataSource}
 						columns={columns}
+						pagination={false}
 					/>
 				)}
 
