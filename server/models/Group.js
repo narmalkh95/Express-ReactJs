@@ -5,21 +5,25 @@ const groupSchema = new mongoose.Schema({
         type: String,
         unique: true
     },
+    shortName: {
+        type: String,
+        unique: true
+    },
     lessonSchedule: [{
         dayOfWeek: {
             type: String,
          },
         timeSlot: {
             type: String,
-         }
-    }],
-    rooms: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Room'
-    }],
-    teachers: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Teacher'
+         },
+        teacher: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Teacher'
+        },
+        room: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Room'
+        },
     }],
     students: [{
         type: mongoose.Schema.Types.ObjectId,

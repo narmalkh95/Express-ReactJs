@@ -4,7 +4,7 @@ import {SERVER_HOST_IP} from "../constants/config";
 export const classApi = createApi({
 	reducerPath: 'classApi',
 	// baseQuery: fetchBaseQuery({
-	baseUrl: SERVER_HOST_IP,
+	// baseUrl: SERVER_HOST_IP,
 	// 	prepareHeaders: (headers, { getState }) => {
 	// 			const token = getToken();
 	// 			// If we have a token set in state, let's assume that we should be passing it.

@@ -1,5 +1,6 @@
 import {logout} from "../slice/authSlice";
 import {fetchBaseQuery} from "@reduxjs/toolkit/query/react";
+import {SERVER_HOST_IP} from "../constants/config";
 
 export const isAuthenticated = () => {
     return !!getToken();
@@ -17,7 +18,7 @@ export const removeToken = () => {
     localStorage.removeItem('token');
 };
 
-const baseQuery = fetchBaseQuery({ baseUrl: 'http://localhost:8080', prepareHeaders: (headers, { getState }) => {
+const baseQuery = fetchBaseQuery({ baseUrl: `http://${SERVER_HOST_IP}`, prepareHeaders: (headers, { getState }) => {
         const token = getToken();
         // If we have a token set in state, let's assume that we should be passing it.
         if (token) {

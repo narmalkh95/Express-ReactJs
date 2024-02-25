@@ -1,1 +1,2 @@
 export const SERVER_HOST_IP = '192.168.0.100:8080'
+// export const SERVER_HOST_IP = '192.168.227.157:8080'
