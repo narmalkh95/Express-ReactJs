@@ -1,16 +1,14 @@
 const express = require('express');
-const router = express.Router();
-const { MongoClient } = require('mongodb');
-const uri = 'mongodb://localhost:27017/mydb';
-const bcrypt = require('bcrypt');
+const router = express.Router();const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const Users = require('../models/User');
 
 router.post('/login', async (req, res) => {
-    const { username, password } = req.body;
+    const { email,  password } = req.body;
 
     try {
-        const user = await Users.findOne({username});
+
+        const user =  await Users.findOne({email}).populate('role');
 
         if (!user) {
             return res.status(401).json({ message: 'Invalid username' });
@@ -22,9 +20,11 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ message: 'Invalid password' });
         }
 
-        const token = jwt.sign({ userId: user._id }, 'secret', { expiresIn: '1w' });
+        const roles = user.role ? [user.role.name] : [];
 
-        res.json({ message: 'Login successful', token });
+        const token = jwt.sign({ userId: user._id}, 'secret', { expiresIn: '1w' });
+
+        res.json({ message: 'Login successful', token,  roles, permissions: []  });
 
     } catch (error) {
         console.error('Error during login:', error);

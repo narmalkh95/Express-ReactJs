@@ -6,6 +6,13 @@ export const isAuthenticated = () => {
     return !!getToken();
 };
 
+export const setRoles = (roles) => {
+    localStorage.setItem('roles', roles);
+};
+export const getRoles = () => {
+    return localStorage.getItem('roles');
+};
+
 export const setToken = (token) => {
     localStorage.setItem('token', token);
 };
