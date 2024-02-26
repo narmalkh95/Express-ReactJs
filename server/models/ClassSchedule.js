@@ -19,17 +19,15 @@ async function getClassSchedule() {
 
         groups.forEach(group => {
             group.lessonSchedule.forEach(lesson => {
-                const { dayOfWeek, timeSlot, teacher, room, classType } = lesson;
-
-                // const teacherNames = group.teachers.map(teacher => teacher.name).join(', ');
-
-                // const studentNames = group.students.map(student => student.name);
+                const { dayOfWeek, timeSlot, teacher, room, classType, _id } = lesson;
 
                 const obj = {
                     groupName: group.shortName,
                     room: room.name,
                     teacher: teacher.name,
-                    classType: classType.name
+                    classType: classType.name,
+                    lessonScheduleId: _id,
+                    groupId: group._id
                     // timeSlot,
                     // students: studentNames,
                 };

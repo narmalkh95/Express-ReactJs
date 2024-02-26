@@ -53,12 +53,19 @@ router.get('/class/params', verifyToken, (req, res, next) => hasRole(req, res, n
 //         .catch((err) => res.status(500).json(err));
 // });
 //
-// // Delete class
-// router.delete('/class/:id', (req, res) => {
-//     const { id } = req.params;
-//     Class.findByIdAndDelete(id)
-//         .then(() => res.sendStatus(204))
-//         .catch((err) => res.status(500).json(err));
-// });
+
+// Delete class
+router.post('/class/delete/', async(req, res) => {
+	const { lessonScheduleId, groupId} = req.body;
+
+	try {
+		const group = await Group.findById(groupId);
+		group.lessonSchedule.pull({ _id: lessonScheduleId });
+		await group.save();
+		return res.sendStatus(200)
+	} catch (error) {
+		return res.sendStatus(500).json(error)
+	}
+});
 
 module.exports = router;

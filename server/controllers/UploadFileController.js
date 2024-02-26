@@ -1,9 +1,8 @@
 const {model} = require("mongoose");
-const router = express.Router();
 const express = require("express");
+const router = express.Router();
  const multer = require('multer');
 
-const upload = multer({ storage });
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads/');
@@ -12,6 +11,7 @@ const storage = multer.diskStorage({
         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
     },
 });
+const upload = multer({ storage });
 
 router.post('/', upload.single('file'), (req, res) => {
     const file = req.file;

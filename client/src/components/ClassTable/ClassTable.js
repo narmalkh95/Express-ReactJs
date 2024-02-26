@@ -1,7 +1,10 @@
-import {Button, Table} from "antd";
+import {Button, message, Popconfirm, Spin, Table} from "antd";
 import {useCallback, useEffect, useMemo, useState} from "react";
 import CreateNewLesson from "./CreateNewLesson";
 import {useGetLessonsMutation} from "../../features/classApi";
+import {SERVER_HOST_IP} from "../../constants/config";
+import * as auth from "../../helpers/auth";
+import {setLoading} from "../../slice/authSlice";
 
 const lessonTimes = [
 	'9:30 - 10:50',
@@ -35,14 +38,46 @@ const ClassTable = () => {
 		getLessons();
 	}, []);
 
+	const handleRemove = useCallback((lessonScheduleId, groupId) => {
+		setLoading(true)
+		try {
+			const token = auth.getToken();
+			setTimeout(() => {
+				fetch(
+					`http://${SERVER_HOST_IP}/class/delete`,
+					{
+						method: 'POST',
+						body: JSON.stringify({lessonScheduleId, groupId}),
+						headers: {'Content-Type': 'application/json', Authorization: token}
+					},
+				).then(() => {
+					message.success('Դասաժամը հաջողությամբ հեռացված է:');
+					getLessons();
+				})
+			}, 1500)
+		} catch (e) {
+			message.error('Սխալմունք:');
+		} finally {
+			setLoading(false)
+		}
+	}, []);
+
 	const renderTableItem = useCallback((i, index) => {
 		return (
-			<p key={index}>
-				<span style={{textTransform: 'capitalize'}}>{i.groupName + ' '}</span>
-				<span style={{color: "gray"}}>{i.classType + ' '}</span>
-				<span style={{color: 'red'}}>{i.teacher + ' '}</span>
-				<span style={{color: 'purple'}}>{i.room}</span>
-			</p>
+			<Popconfirm
+				title="Հեռացնել դասաժամը"
+				description="Արդյո՞ք ցանկանում եք հեռացնել դասաժամը:"
+				onConfirm={() => handleRemove(i.lessonScheduleId, i.groupId)}
+				okText="Այո"
+				cancelText="Ոչ"
+			>
+				<p style={{cursor: 'pointer'}}>
+					<span style={{textTransform: 'capitalize'}}>{i.groupName + ' '}</span>
+					<span style={{color: "gray"}}>{i.classType + ' '}</span>
+					<span style={{color: 'red'}}>{i.teacher + ' '}</span>
+					<span style={{color: 'purple'}}>{i.room}</span>
+				</p>
+			</Popconfirm>
 		)
 	}, []);
 
@@ -76,7 +111,7 @@ const ClassTable = () => {
 					getLessons={getLessons}
 				/>
 
-				{!isLoading && (
+				{isLoading ? <Spin /> : (
 					<Table
 						dataSource={dataSource}
 						columns={columns}
