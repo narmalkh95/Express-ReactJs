@@ -1,19 +1,18 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
-import { Layout, Menu } from 'antd';
+import {Layout, Menu} from 'antd';
 import {
     HomeOutlined,
     DashboardOutlined,
-    LoginOutlined,
     LogoutOutlined
 } from '@ant-design/icons';
 import {logout} from "../../slice/authSlice";
+import PermissionWrapper from "../PermissionWrapper/PermissionWrapper";
 
-const { Sider } = Layout;
+const {Sider} = Layout;
 
 const Sidebar = () => {
-    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
     const dispatch = useDispatch();
 
     const handleLogout = () => {
@@ -21,28 +20,30 @@ const Sidebar = () => {
     };
 
     return (
-        <Sider style={{ height: '100vh' }}>
-            <div className="logo" />
+        <Sider style={{height: '100vh'}}>
+            <div className="logo"/>
             <Menu theme="dark" mode="inline">
-                <Menu.Item key="1" icon={<HomeOutlined />}>
-                    <Link to="/">Home</Link>
-                </Menu.Item>
-                {isAuthenticated && (
-                    <Menu.Item key="2" icon={<DashboardOutlined />}>
+                <PermissionWrapper userPermissions={['Admin']}>
+                    <Menu.Item key="1" icon={<HomeOutlined/>}>
+                        <Link to="/class/create">Class List</Link>
+                    </Menu.Item>
+                </PermissionWrapper>
+                <PermissionWrapper userPermissions={['Admin']}>
+                    <Menu.Item key="2" icon={<DashboardOutlined/>}>
                         <Link to="/dashboard">Dashboard</Link>
                     </Menu.Item>
-                )}
-                {!isAuthenticated && (
-                    <Menu.Item key="3" icon={<LoginOutlined />}>
-                        <Link to="/login">Login</Link>
+                </PermissionWrapper>
+                <PermissionWrapper userPermissions={['Admin', 'Student']}>
+                    <Menu.Item key="3" icon={<DashboardOutlined/>}>
+                        <Link to="/score">Score</Link>
                     </Menu.Item>
-                )}
-
-                {isAuthenticated && (
-                    <Menu.Item key="5" icon={<LogoutOutlined />} onClick={handleLogout}>
+                </PermissionWrapper>
+                <PermissionWrapper userPermissions={['Admin']}>
+                    <Menu.Item key="4" icon={<LogoutOutlined/>} onClick={handleLogout}>
                         Logout
                     </Menu.Item>
-                )}
+                </PermissionWrapper>
+
             </Menu>
         </Sider>
     );

@@ -16,6 +16,7 @@ export const authApi = createApi({
         }),
         onSuccess: (data, { dispatch }) => {
             const { token, roles } = data;
+            console.log(roles,'roels')
             setToken(token);
             setRoles(roles);
             dispatch(setLoading(false));

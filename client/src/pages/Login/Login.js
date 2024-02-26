@@ -1,10 +1,10 @@
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import {useLoginMutation} from "../../features/authApi";
 import {useNavigate} from 'react-router-dom';
 
 import styles from './login.module.css';
-import {setToken} from "../../helpers/auth";
-import {setLoading, setLoginSuccess} from "../../slice/authSlice";
+import {setRoles, setToken} from "../../helpers/auth";
+import { setLoginSuccess} from "../../slice/authSlice";
 import {useDispatch} from "react-redux";
 
 const {loginForm, inputField, loginButton} = styles;
@@ -15,15 +15,17 @@ const Login = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const [login, {data, isSuccess,isError, isLoading, error}] = useLoginMutation();
+    const [login, {isLoading, error}] = useLoginMutation();
 
     const handleLogin = async () => {
         try {
             login({email, password}).then(data => {
-                const { token } = data?.data || {};
+                const {token, roles} = data?.data || {};
 
                 if (token) {
                     setToken(token);
+                    setRoles(roles);
+
                     navigate('/dashboard');
                     dispatch(setLoginSuccess());
                 }

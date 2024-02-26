@@ -7,10 +7,10 @@ export const isAuthenticated = () => {
 };
 
 export const setRoles = (roles) => {
-    localStorage.setItem('roles', roles);
+    localStorage.setItem('roles', JSON.stringify(roles));
 };
 export const getRoles = () => {
-    return localStorage.getItem('roles');
+    return JSON.parse(localStorage.getItem('roles'));
 };
 
 export const setToken = (token) => {

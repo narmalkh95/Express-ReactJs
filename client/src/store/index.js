@@ -4,6 +4,7 @@ import { qrApi } from '../features/qrApi';
 import {classApi} from "../features/classApi";
 import { setupListeners } from '@reduxjs/toolkit/query';
 import authSlice from "../slice/authSlice";
+import uploadSlice from "../slice/uploadSlice";
 
  export const store = configureStore({
     reducer: {
@@ -11,6 +12,7 @@ import authSlice from "../slice/authSlice";
         [qrApi.reducerPath]: qrApi.reducer,
         [classApi.reducerPath]: classApi.reducer,
         auth: authSlice.reducer,
+        upload: uploadSlice.reducer,
     },
     middleware: (getDefaultMiddleware) => {
          return getDefaultMiddleware().concat(authApi.middleware, qrApi.middleware, classApi.middleware);
