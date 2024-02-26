@@ -1,0 +1,17 @@
+
+.custom-file {
+    margin-bottom: 1rem;
+}
+
+.custom-file-input {
+    cursor: pointer;
+}
+
+.btn {
+    background-color: #007bff;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+}

@@ -4,13 +4,20 @@ const bcrypt = require('bcrypt');
 const userSchema = new mongoose.Schema({
     username: String,
     password: String,
-    role: String,
+    email: {
+        type: String,
+        unique: true
+    },
+    role: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Role'
+    }
 });
 
 const ROLES = {
-    ADMIN: "ADMIN",
-    SUPERVISOR: "SUPERVISOR",
-    USER: 'USER'
+    ADMIN: "Admin",
+    TEACHER: "Teacher",
+    STUDENT: 'Student'
 }
 
 userSchema.pre('save', async function (next) {

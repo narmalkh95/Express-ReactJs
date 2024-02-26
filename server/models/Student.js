@@ -4,6 +4,11 @@ const studentSchema = new mongoose.Schema({
     name: {
         type: String,
      },
+    email: {
+        type: String,
+        unique: true
+    },
+    password: String,
     group: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Group'
