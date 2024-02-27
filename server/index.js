@@ -2,11 +2,11 @@ const express = require("express");
 const app = express();
 const cors = require('cors');
 // require('./fack');
-require('./fackClass');
+// require('./fackClass');
 app.use(express.json());
 app.use(cors())
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8081;
 const HOST = process.env.HOST_IP || 'localhost';
 
 require('./db');
@@ -27,6 +27,6 @@ app.use('file',uploadController)
 app.post('/login', loginController);
 
 
-app.listen(PORT,() => {
+app.listen(PORT,'192.168.86.25',() => {
     console.log(`Server is listening on port ${PORT}`);
 });

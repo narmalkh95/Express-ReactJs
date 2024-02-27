@@ -13,11 +13,13 @@ const moment = require('moment');
 
 async function generateMockData() {
     try {
-        const roles = await Role.find({});
 
+        await mongoose.connect('mongodb://localhost:27017/mydb');
+
+        const roles = await Role.find({});
         const rolesObj = {};
         roles.map(i => {rolesObj[i.name] = i.id})
-
+        console.log(rolesObj,'rolesObj')
         // Create rooms
         const rooms = await Room.create([
             { name: '5214' },
@@ -195,7 +197,7 @@ const createFakeAttendanceListData = async(groups, students) => {
         // "dayOfWeek": 1,
         // "timeSlot": "9:30 - 10:50"
         // }]
-        const startDate = moment('01-01-2024', 'DD-MM-YYYY').format('DD-MM-YYYY');
+        const startDate = moment('2024-01-01', 'YYYY-MM-DD').format('YYYY-MM-DD');
         const endDate = moment();
         const attendanceValues = Object.values(attendanceStatus);
         // const usersList = await User.find({}).populate('username').populate('role');
@@ -221,36 +223,26 @@ const createFakeAttendanceListData = async(groups, students) => {
 
         for (let m = moment(startDate); m.isBefore(endDate); m.add(1, 'days')) {
             const weekDay = m.day();
-            if (weekDay === 0 || weekDay === 6 ) continue;
+            if (weekDay === 0 || weekDay === 6) continue;
 
-            Object.keys(studentsData).forEach(id => {
-                studentsData[id].forEach(async (lesson) => {
-                    //User have a lesson at this day of the week
-                    if (lesson.dayOfWeek === weekDay) {
-                        const attendanceObj = {
-                            date: m.format('DD-MM-YYYY'), // Current day
-                            timeSlot: lesson.timeSlot,
-                            status: attendanceValues[Math.floor(Math.random() * 2)]
-                        }
+            for (const id of Object.keys(studentsData)) {
+                const user = await User.findById(id);
+                const studentLessons = studentsData[id];
 
-                        const user = await User.findById(id);
-                        // const user = await students.findById(id);
-                        user.attendanceList.push(attendanceObj);
-                        await user.save();
-                    }
-                })
-            })
+                const lessonsForDay = studentLessons.filter(lesson => lesson.dayOfWeek === weekDay);
 
-            // const status = attendanceValues[Math.floor(Math.random() * 3)];
-            //
-            // //Do not push to have also absent status
-            // if (status === attendanceStatus.acceptable) continue;
-            //
-            // studentsData.push({
-            //     date: m.format('DD-MM-YYYY'),
-            //     timeSlot: availableTimeslots[Math.floor(Math.random() * availableTimeslots.length)],
-            //     status
-            // });
+                for (const lesson of lessonsForDay) {
+                    const attendanceObj = {
+                        date: m.format('DD-MM-YYYY'),
+                        timeSlot: lesson.timeSlot,
+                        status: attendanceValues[Math.floor(Math.random() * 2)]
+                    };
+
+                    user.attendanceList.push(attendanceObj);
+                }
+
+                await user.save();
+            }
         }
 
         console.log('Mock data generated successfully');
