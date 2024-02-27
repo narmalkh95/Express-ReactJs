@@ -9,7 +9,7 @@ router.post('/login', async (req, res) => {
     try {
 
         const user =  await Users.findOne({email}).populate('role');
-
+        console.log(user,'ser')
         if (!user) {
             return res.status(401).json({ message: 'Invalid username' });
         }

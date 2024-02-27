@@ -28,7 +28,7 @@ const fakeStudent = {
 
 async function createFakeUser() {
     try {
-        // await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+         await mongoose.connect(uri);
 
         const [adminRole, teacherRole, studentRole] = await Promise.all([
             Role.create({ name: 'Admin' }),
