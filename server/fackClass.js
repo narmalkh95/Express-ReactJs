@@ -19,7 +19,7 @@ async function generateMockData() {
         const roles = await Role.find({});
         const rolesObj = {};
         roles.map(i => {rolesObj[i.name] = i.id})
-        console.log(rolesObj,'rolesObj')
+
         // Create rooms
         const rooms = await Room.create([
             { name: '5214' },
