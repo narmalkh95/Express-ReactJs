@@ -8,7 +8,7 @@ const ClassType = require('./models/ClassType');
 const Role = require('./models/Role');
 const User = require('./models/User');
 const {ROLES, attendanceStatus} = require("./models/User");
-const {availableWeekDays, availableTimeslots} = require('./constants/index')
+const {availableWeekDays, availableTimeslots, toMomentWeekDays} = require('./constants/index')
 const moment = require('moment');
 
 async function generateMockData() {
@@ -176,9 +176,8 @@ async function generateMockData() {
             },
         ]);
 
-        await createFakeAttendanceListData();
+        await createFakeAttendanceListData(groups, students);
 
-        console.log('Mock data generated successfully');
     } catch (error) {
         console.error('Error generating mock data:', error);
     } finally {
@@ -186,38 +185,78 @@ async function generateMockData() {
     }
 }
 
-const createFakeAttendanceListData = async() => {
-    const data = [];
-    const startDate = moment('01-01-2024', 'DD-MM-YYYY').format('DD-MM-YYYY');
-    const endDate = moment();
-    const attendanceValues = Object.values(attendanceStatus);
-    const usersList = await User.find({}).populate('username').populate('role');
-    const studentsList = usersList.filter(i => i.role.name === ROLES.STUDENT);
+const createFakeAttendanceListData = async(groups, students) => {
+    try {
+        // const uri = 'mongodb://localhost:27017/mydb';
+        // await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-    //Todo Search in Group by student id to get exact lessonSchedule for exact student and then create attendance list.
-    // console.log(studentsList[0].id)
+        const studentsData = {};
+        // studentId: [{
+        // "dayOfWeek": 1,
+        // "timeSlot": "9:30 - 10:50"
+        // }]
+        const startDate = moment('01-01-2024', 'DD-MM-YYYY').format('DD-MM-YYYY');
+        const endDate = moment();
+        const attendanceValues = Object.values(attendanceStatus);
+        // const usersList = await User.find({}).populate('username').populate('role');
+        // const studentsList = usersList.filter(i => i.role.name === ROLES.STUDENT);
 
-    for (let m = moment(startDate); m.isBefore(endDate); m.add(1, 'days')) {
-        const weekDay = m.day();
-        if (weekDay === 0 || weekDay === 6) continue;
+        // console.log(groups)
+        // console.log(students)
+        //
+        // groups.map(group => {
+        //     const weekDaysStudentHaveLessons = [];
+        //    group.lessonSchedule.map(lesson => {
+        //
+        //    });
+        // });
+        //
+        students.map(student => {
+            const studentLessonSchedule = groups.filter(group => group.students.includes(student._id))[0].lessonSchedule;
 
-        const status = attendanceValues[Math.floor(Math.random() * 3)];
+            studentsData[student._id] = studentLessonSchedule.map(i => {
+                return {dayOfWeek: toMomentWeekDays[i.dayOfWeek], timeSlot: i.timeSlot}
+            });
+        })
 
-        //Do not push to have also absent status
-        if (status === attendanceStatus.acceptable) continue;
+        for (let m = moment(startDate); m.isBefore(endDate); m.add(1, 'days')) {
+            const weekDay = m.day();
+            if (weekDay === 0 || weekDay === 6 ) continue;
 
-        data.push({
-            date: m.format('DD-MM-YYYY'),
-            timeSlot: availableTimeslots[Math.floor(Math.random() * availableTimeslots.length)],
-            status
-        });
+            Object.keys(studentsData).forEach(id => {
+                studentsData[id].forEach(async (lesson) => {
+                    //User have a lesson at this day of the week
+                    if (lesson.dayOfWeek === weekDay) {
+                        const attendanceObj = {
+                            date: m.format('DD-MM-YYYY'), // Current day
+                            timeSlot: lesson.timeSlot,
+                            status: attendanceValues[Math.floor(Math.random() * 2)]
+                        }
+
+                        const user = await User.findById(id);
+                        // const user = await students.findById(id);
+                        user.attendanceList.push(attendanceObj);
+                        await user.save();
+                    }
+                })
+            })
+
+            // const status = attendanceValues[Math.floor(Math.random() * 3)];
+            //
+            // //Do not push to have also absent status
+            // if (status === attendanceStatus.acceptable) continue;
+            //
+            // studentsData.push({
+            //     date: m.format('DD-MM-YYYY'),
+            //     timeSlot: availableTimeslots[Math.floor(Math.random() * availableTimeslots.length)],
+            //     status
+            // });
+        }
+
+        console.log('Mock data generated successfully');
+    } catch (err) {
+        console.error('Error generating mock data in createFakeAttendanceListData:', err);
     }
-
-    // console.log(data)
-
-    return data
 }
 
-// generateMockData();
-
-createFakeAttendanceListData()
+generateMockData();

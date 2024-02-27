@@ -8,4 +8,12 @@ const availableWeekDays = {
 	friday: 'Ուրբաթ',
 };
 
-module.exports = {availableTimeslots, availableWeekDays};
+const toMomentWeekDays = {
+	[availableWeekDays.monday]: 1,
+	[availableWeekDays.tuesday]: 2,
+	[availableWeekDays.wednesday]: 3,
+	[availableWeekDays.thursday]: 4,
+	[availableWeekDays.friday]: 5,
+}
+
+module.exports = {availableTimeslots, availableWeekDays, toMomentWeekDays};
