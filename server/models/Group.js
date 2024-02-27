@@ -18,7 +18,7 @@ const groupSchema = new mongoose.Schema({
          },
         teacher: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Teacher'
+            ref: 'User'
         },
         room: {
             type: mongoose.Schema.Types.ObjectId,
@@ -31,7 +31,7 @@ const groupSchema = new mongoose.Schema({
     }],
     students: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Student'
+        ref: 'User'
     }],
     time: {
         type: String,

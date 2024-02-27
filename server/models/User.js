@@ -11,7 +11,12 @@ const userSchema = new mongoose.Schema({
     role: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Role'
-    }
+    },
+    attendanceList: [{
+        date: String,
+        timeSlot: String,
+        status: String
+    }]
 });
 
 const ROLES = {
@@ -33,3 +38,8 @@ userSchema.pre('save', async function (next) {
 
 module.exports = mongoose.model('User', userSchema);
 module.exports.ROLES = ROLES;
+module.exports.attendanceStatus = {
+    inTime: 'InTime',
+    late: 'Late',
+    acceptable: 'Acceptable'
+};
