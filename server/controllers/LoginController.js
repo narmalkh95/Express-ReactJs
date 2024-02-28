@@ -9,15 +9,14 @@ router.post('/login', async (req, res) => {
     try {
 
         const user =  await Users.findOne({email}).populate('role');
-        console.log(user,'ser')
         if (!user) {
             return res.status(401).json({ message: 'Invalid username' });
         }
 
-        const passwordMatch = await bcrypt.compare(password, user.password);
+        const passwordMatch =  await bcrypt.compare(password, user.password);
 
         //Todo check why insert many is not encrypting password in fackClass.js
-        if (!passwordMatch && (!password === user.password)) {
+        if (!passwordMatch) {
             return res.status(401).json({ message: 'Invalid password' });
         }
 

@@ -1,0 +1,20 @@
+.dashboardContainer {
+    display: flex;
+     align-items: center;
+    justify-content: space-around;
+}
+
+.qrCodeContainer {
+    margin-bottom: 20px;
+ }
+
+/* Responsive styles */
+@media screen and (min-width: 768px) {
+    .dashboardContainer {
+        flex-direction: row;
+     }
+
+    .qrCodeContainer {
+        margin-right: 20px;
+    }
+}
