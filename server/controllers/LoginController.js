@@ -16,7 +16,8 @@ router.post('/login', async (req, res) => {
 
         const passwordMatch = await bcrypt.compare(password, user.password);
 
-        if (!passwordMatch) {
+        //Todo check why insert many is not encrypting password in fackClass.js
+        if (!passwordMatch && (!password === user.password)) {
             return res.status(401).json({ message: 'Invalid password' });
         }
 

@@ -33,7 +33,7 @@ router.post('/class', async(req, res) => {
 // Read all classes
 router.get('/class',
     verifyToken,
-    (req, res, next) => hasRole(req, res, next, [ROLES.ADMIN]),
+    (req, res, next) => hasRole(req, res, next, [ROLES.ADMIN, ROLES.STUDENT, ROLES.TEACHER]),
     (req, res) => {
 	getClassSchedule()
 		.then((data) => res.json(data))

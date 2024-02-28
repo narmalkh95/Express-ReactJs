@@ -24,7 +24,7 @@ async function getClassSchedule() {
                 const obj = {
                     groupName: group.shortName,
                     room: room.name,
-                    teacher: teacher.name,
+                    teacher: teacher.username,
                     classType: classType.name,
                     lessonScheduleId: _id,
                     groupId: group._id

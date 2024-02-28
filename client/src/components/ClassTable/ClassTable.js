@@ -112,11 +112,14 @@ const ClassTable = () => {
 				/>
 
 				{isLoading ? <Spin /> : (
-					<Table
-						dataSource={dataSource}
-						columns={columns}
-						pagination={false}
-					/>
+					<>
+						<h4>Դասացուցակ</h4>
+						<Table
+							dataSource={dataSource}
+							columns={columns}
+							pagination={false}
+						/>
+					</>
 				)}
 
 			</div>

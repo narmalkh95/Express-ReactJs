@@ -223,7 +223,7 @@ const createFakeAttendanceListData = async(groups, students) => {
 
         for (let m = moment(startDate); m.isBefore(endDate); m.add(1, 'days')) {
             const weekDay = m.day();
-            if (weekDay === 0 || weekDay === 6) continue;
+            if (weekDay === 0 || weekDay === 6 ) continue;
 
             for (const id of Object.keys(studentsData)) {
                 const user = await User.findById(id);
