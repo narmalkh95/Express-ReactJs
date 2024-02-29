@@ -15,10 +15,10 @@ router.get('/',
 
 		//If the logged user is student get the student Id as userId.
 		//If the logged user is teacher get the student id from params.
-		User.findById(studentId || userId).then(user => {
+		User.findById(studentId !== 'null' ? studentId : userId).then(user => {
 			Group.find({}).populate('lessonSchedule.classType').populate('lessonSchedule.room').populate('lessonSchedule.teacher')
 				.then(groups => {
-					const currentGroup = groups.filter(group => group.students.includes(studentId || userId))[0];
+					const currentGroup = groups.filter(group => group.students.includes(studentId !== 'null' ? studentId : userId))[0];
 					res.json({
 						attendanceList: user.attendanceList,
 						lessonSchedule: currentGroup['lessonSchedule'],
