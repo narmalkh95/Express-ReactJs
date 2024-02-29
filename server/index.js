@@ -33,6 +33,6 @@ app.use('/attendance', attendanceController);
 app.use('/students', studentsController);
 
 
-app.listen(PORT,'192.168.0.101',() => {
+app.listen(PORT,'',() => {
     console.log(`Server is listening on port ${PORT}`);
 });
