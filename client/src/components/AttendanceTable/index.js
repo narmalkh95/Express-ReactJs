@@ -57,13 +57,17 @@ const AttendanceTable = () => {
 	}, [toggleFetch, selectedStudent]);
 
 	const calcWeekScore = useCallback((data) => {
-		let weekNumber = weeksFromStartOfTheYear;
-		let weekCountObject = weeksToBeCalculated[weekNumber];
+		//Uncomment this for real use case.
+		// let weekNumber = weeksFromStartOfTheYear;
+		// let weekCountObject = weeksToBeCalculated[weekNumber];
+		//
+		// while(!weekCountObject) {
+		// 	weekCountObject = weeksToBeCalculated[weekNumber + 1]
+		// 	weekNumber++;
+		// }
 
-		while(!weekCountObject) {
-			weekCountObject = weeksToBeCalculated[weekNumber + 1]
-			weekNumber++;
-		}
+		let weekNumber = 16;
+		let weekCountObject = weeksToBeCalculated[weekNumber];
 
 		const attendanceList = data['attendanceList'];
 		const lessonSchedule = data['lessonSchedule'];
