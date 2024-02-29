@@ -34,6 +34,7 @@ const AttendanceTable = () => {
 	const [selectedStudent, setSelectedStudent] = useState(null);
 	const [calendarDate, setCalendarDate ] = useState(() => dayjs('2024-01-01'));
 	const weeksFromStartOfTheYear = moment(new Date()).diff(moment(calendarDate.format('YYYY-MM-DD'), 'YYYY-MM-DD'), 'week');
+	const [scoreObj, setScoreObj] = useState(null);
 
 	useEffect(() => {
 		const token = auth.getToken();
@@ -62,16 +63,22 @@ const AttendanceTable = () => {
 		while(!weekCountObject) {
 			weekCountObject = weeksToBeCalculated[weekNumber + 1]
 			weekNumber++;
-		};
+		}
 
 		const attendanceList = data['attendanceList'];
 		const lessonSchedule = data['lessonSchedule'];
 
-		console.log(data)
+		const numberOfLessonsInWeek = lessonSchedule.length;
+		const numberShouldBePresent = numberOfLessonsInWeek * weekNumber;
+		const numberOfBeingPresent = attendanceList.length;
+		const absentCount = numberShouldBePresent - numberOfBeingPresent;
+		const scoreCount = weekCountObject[absentCount] || 0;
 
-
-		console.log(weekCountObject)
-		console.log(weekNumber)
+		setScoreObj({
+			count: scoreCount,
+			week: weekNumber,
+			absent: absentCount
+		});
 	}, [])
 
 	const dateCellRender = (value) => {
@@ -130,7 +137,6 @@ const AttendanceTable = () => {
 
 		return <Calendar dateCellRender={dateCellRender} style={{padding: 10}} mode={'month'} value={calendarDate} onPanelChange={val => {
 			setCalendarDate(val)
-			console.log(val)
 		}}/>;
 	}
 
@@ -145,7 +151,7 @@ const AttendanceTable = () => {
 				name={'student'}
 				label={'Ուսանող'}
 				rules={[{required: true, message: 'Պարտադիտ դաշտ:'}]}
-				style={{minWidth: 350, marginLeft: 20}}
+				style={{minWidth: 350, marginLeft: 20, marginBottom: 0}}
 			>
 				<Select
 					options={studentOptions}
@@ -162,7 +168,7 @@ const AttendanceTable = () => {
 		<div>
 			<h4>Հաճախումներ</h4>
 
-			<div style={{display: 'flex'}}>
+			<div className={'attendance-header'}>
 				{!isStudentRole && (
 					<Button type="primary" onClick={() => setIsStatusChangeModalOpen(true)}>
 						Փոխել կարգավիճակը
@@ -170,6 +176,14 @@ const AttendanceTable = () => {
 				)}
 
 				{!isStudentRole && studentSelect}
+
+				{scoreObj !== null && (
+					<div style={{marginLeft: 20}}>
+						<p>Հաշվարկն ըստ {scoreObj.week} շաբաթի</p>
+						<p>Գնահատական - {scoreObj.count}</p>
+						<p>Բացակաների հանրագումար - {scoreObj.absent}</p>
+					</div>
+				)}
 			</div>
 
 			{rendCalendar()}
