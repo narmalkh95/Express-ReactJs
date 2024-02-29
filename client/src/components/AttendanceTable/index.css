@@ -39,3 +39,8 @@
         font-size: 12px !important;
     }
 }
+
+.attendance-header {
+    display: flex;
+    align-items: center;
+}
