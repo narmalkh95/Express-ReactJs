@@ -41,30 +41,30 @@ const MenuComponent = ({ isHeader }) => {
     };
 
     const main = (
-             <Menu theme={"dark"} mode={isHeader ? "horizontal" : "inline"} selectedKeys={selectedKeys}>
+             <Menu  theme={"dark"} mode={isHeader ? "horizontal" : "inline"} selectedKeys={selectedKeys}>
                 <PermissionWrapper userPermissions={['Admin']}>
                     <Menu.Item key="1" icon={<HomeOutlined />}>
-                        <Link to="/class/create">Class List</Link>
+                        <Link to="/class/create">Դասացուցակ</Link>
                     </Menu.Item>
                 </PermissionWrapper>
                 <PermissionWrapper userPermissions={['Admin']}>
                     <Menu.Item key="2" icon={<DashboardOutlined />}>
-                        <Link to="/dashboard">Dashboard</Link>
+                        <Link to="/dashboard">Հիմնական</Link>
                     </Menu.Item>
                 </PermissionWrapper>
                 <PermissionWrapper userPermissions={['Admin', 'Student']}>
                     <Menu.Item key="3" icon={<DashboardOutlined />}>
-                        <Link to="/score">Score</Link>
+                        <Link to="/messages">Հաղորդագրություն</Link>
                     </Menu.Item>
                 </PermissionWrapper>
                 <PermissionWrapper userPermissions={['Admin', 'Student']}>
                     <Menu.Item key="4" icon={<DashboardOutlined />}>
-                        <Link to="/attendance">Attendance</Link>
+                        <Link to="/attendance">Ներկայություն</Link>
                     </Menu.Item>
                 </PermissionWrapper>
                  <PermissionWrapper userPermissions={['Admin', 'Student','Teacher']}>
                     <Menu.Item key="5" icon={<LogoutOutlined />} onClick={handleLogout} >
-                        Logout
+                        Դուրս գալ
                     </Menu.Item>
                  </PermissionWrapper>
             </Menu>
@@ -72,7 +72,7 @@ const MenuComponent = ({ isHeader }) => {
 
      return (
         isHeader ? (
-            <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
+            <Header style={{ position: 'relative', zIndex: 1, width: '100%' }}>
                 {main}
             </Header>
         ) : (

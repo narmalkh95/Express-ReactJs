@@ -10,6 +10,7 @@ import {useSelector} from "react-redux";
 import AttendancePage from "../pages/Attendance/AttendancePage";
 import MenuComponent from "../components/Menu/MenuComponent";
 import ClassPage from "../pages/Class/ClassPage";
+import Messages from "../pages/Messages/Messages";
 
 const AppRouter = () => {
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -48,6 +49,14 @@ const AppRouter = () => {
                         children={
                             <AppLayout Component={<MenuComponent isHeader={true}/>}>
                                 <AttendancePage/>
+                            </AppLayout>
+                        }/>}/>
+
+                <Route exact path='/messages' element={
+                    <PrivateRoute
+                        children={
+                            <AppLayout Component={<MenuComponent />}>
+                                <Messages/>
                             </AppLayout>
                         }/>}/>
 

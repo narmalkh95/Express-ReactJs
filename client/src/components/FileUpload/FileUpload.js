@@ -1,30 +1,50 @@
-import React, {useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {uploadFile} from "../../slice/uploadSlice";
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { uploadFile } from "../../slice/uploadSlice";
 import styles from './UploadForm.module.css'
-import {Form, Input, Button, Card} from 'antd';
+import { Form, Input, Button, Card } from 'antd';
+import { message as messageAntd } from 'antd';
+import * as auth from "../../helpers/auth";
 
 const UploadForm = () => {
     const [file, setFile] = useState(null);
     const [fileName, setFileName] = useState('');
+    const [message, setMessage] = useState('');
+    const [form] = Form.useForm();
     const dispatch = useDispatch();
-    const {uploading, uploadedFile, error} = useSelector((state) => state.upload);
+    const { uploading, uploadedFile, error } = useSelector((state) => state.upload);
 
     const onChange = (e) => {
         setFile(e.target.files[0]);
         setFileName(e.target.files[0].name);
     };
 
-    const onSubmit = (e) => {
-        e.preventDefault();
-        dispatch(uploadFile(file));
+    const onMessageChange = (e) => {
+        setMessage(e.target.value);
+    };
+
+    const onFinish = async () => {
+        if (!file || !message) {
+            messageAntd.error('Please select a file and enter a message');
+            return;
+        }
+        const token = auth.getToken();
+        await dispatch(uploadFile(file, message, token));
+        if (!error) {
+            messageAntd.success('File uploaded successfully');
+
+            setMessage('');
+            setFile(null);
+            setFileName('');
+            form.resetFields();
+        }
     };
 
     return (
         <Card className={styles.uploadCard}>
-            <Form layout="vertical">
+            <Form form={form} layout="vertical" onFinish={onFinish}>
                 <Form.Item name="message" rules={[{ required: true, message: 'Please input your message!' }]}>
-                    <Input.TextArea rows={4} placeholder="Դեր նամակը" maxLength={6} />
+                    <Input.TextArea value={message} onChange={onMessageChange} rows={4} placeholder="Դեր նամակը" maxLength={6} />
                 </Form.Item>
                 <Form.Item>
                     <div className="custom-file">
@@ -35,7 +55,7 @@ const UploadForm = () => {
                     </div>
                 </Form.Item>
                 <Form.Item>
-                    <Button type="primary" onClick={onSubmit} htmlType="submit" loading={uploading}>Upload</Button>
+                    <Button type="primary" htmlType="submit" loading={uploading}>Upload</Button>
                 </Form.Item>
             </Form>
         </Card>

@@ -5,6 +5,7 @@ import PermissionWrapper from "../components/PermissionWrapper/PermissionWrapper
 import UploadForm from "../components/FileUpload/FileUpload";
 import AttendanceTable from "../components/AttendanceTable";
 import styles from './Dashboard.module.css'
+import Messages from "./Messages/Messages";
 
 const Dashboard = () => {
     return (

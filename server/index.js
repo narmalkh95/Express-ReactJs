@@ -18,19 +18,21 @@ const uploadController = require('./controllers/UploadFileController');
 const classRoutes = require('./routs/classRoutes');
 const attendanceController = require('./controllers/attendanceController');
 const studentsController = require('./controllers/studentsController');
+const messagesController = require('./controllers/messagesController');
 
 app.use('/qr', qrController);
 app.use('/', classController);
 
 app.use('/test', classRoutes)
 
-app.use('file',uploadController)
+app.use('/upload',uploadController)
+app.use('/messages',messagesController)
 
 app.post('/login', loginController);
 app.use('/attendance', attendanceController);
 app.use('/students', studentsController);
 
 
-app.listen(PORT,'192.168.86.25',() => {
+app.listen(PORT,'192.168.0.101',() => {
     console.log(`Server is listening on port ${PORT}`);
 });

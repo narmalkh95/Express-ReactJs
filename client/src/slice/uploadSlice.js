@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import axios from "axios";
+import {SERVER_HOST_IP} from "../constants/config";
 
 export const uploadSlice = createSlice({
     name: 'upload',
@@ -25,16 +26,24 @@ export const uploadSlice = createSlice({
 });
 
 
-export const uploadFile = (file) => async (dispatch) => {
+export const uploadFile = (file,text, token) => async (dispatch) => {
     dispatch(uploadStart());
     try {
         const formData = new FormData();
         formData.append('file', file);
-        const res = await axios.post('/upload', formData, {
+        formData.append('textData', text)
+        // const axiosInstance = axios.create({
+        //     baseURL: SERVER_HOST_IP, // Replace your_port_number with the port you are using
+        // });
+        const res = await axios.post(`http://${SERVER_HOST_IP}/upload/file`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
+                Authorization: token
             },
+
+
         });
+
         dispatch(uploadSuccess(res.data));
     } catch (error) {
         dispatch(uploadFailure(error.message));
