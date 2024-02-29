@@ -6,7 +6,7 @@ const cors = require('cors');
 app.use(express.json());
 app.use(cors())
 
-const PORT = process.env.PORT || 8081;
+const PORT = process.env.PORT || 8080;
 const HOST = process.env.HOST_IP || 'localhost';
 
 require('./db');
@@ -31,6 +31,6 @@ app.use('/attendance', attendanceController);
 app.use('/students', studentsController);
 
 
-app.listen(PORT,'192.168.86.25',() => {
+app.listen(PORT,'',() => {
     console.log(`Server is listening on port ${PORT}`);
 });

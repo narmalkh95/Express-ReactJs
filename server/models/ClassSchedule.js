@@ -1,10 +1,12 @@
 const Group = require('./Group');
 const Room = require('./Room');
-const Teacher = require('./Teacher');
+const User = require('./User');
 const Student = require('./Student');
 const ClassTypes = require('./ClassType');
 const {ro} = require("faker/lib/locales");
 const {availableWeekDays, availableTimeslots} = require('../constants/index')
+const Role = require("./Role");
+const {ROLES} = require("./User");
 
 async function getClassSchedule() {
     try {
@@ -48,16 +50,20 @@ async function getClassSchedule() {
 
 const getClassCreateParams = async() => {
     const room = await Room.find().populate();
-    const teachers = await Teacher.find().populate();
     const classTypes = await ClassTypes.find().populate();
     const group = await Group.find().populate();
+
+    const roles = await Role.find({});
+    const rolesObj = {};
+    roles.map(i => {rolesObj[i.name] = i.id})
+    const teachers = await User.find({role: rolesObj[ROLES.ADMIN]}).populate();
 
     return {
         group: group.map(i => {
             return {value: i._id, label: i.name}
         }),
         teacher: teachers.map(i => {
-            return {value: i._id, label: i.name}
+            return {value: i._id, label: i.username}
         }),
         room: room.map(i => {
             return {value: i._id, label: i.name}

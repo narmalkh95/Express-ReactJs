@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useState} from "react";
+import {useCallback, useEffect, useMemo, useState} from "react";
 import * as auth from "../../helpers/auth";
 import {SERVER_HOST_IP} from "../../constants/config";
 import React from 'react';
@@ -9,6 +9,19 @@ import StatusChangeModal from "./StatusChangeModal";
 import {getRoles} from "../../helpers/auth";
 import UserRoles from "../../constants/userRoles";
 import dayjs from "dayjs";
+import moment from "moment";
+
+const weeksToBeCalculated = {
+	16: {
+		1: 9,
+		2: 8,
+		3: 7,
+		4: 6,
+		5: 4,
+		6: 3,
+		7: 2
+	}
+}
 
 const AttendanceTable = () => {
 	const [dataList, setDataList] = useState([]);
@@ -20,6 +33,7 @@ const AttendanceTable = () => {
 	const [students, setStudents] = useState([]);
 	const [selectedStudent, setSelectedStudent] = useState(null);
 	const [calendarDate, setCalendarDate ] = useState(() => dayjs('2024-01-01'));
+	const weeksFromStartOfTheYear = moment(new Date()).diff(moment(calendarDate.format('YYYY-MM-DD'), 'YYYY-MM-DD'), 'week');
 
 	useEffect(() => {
 		const token = auth.getToken();
@@ -34,11 +48,31 @@ const AttendanceTable = () => {
 			fetch(`http://${SERVER_HOST_IP}/attendance?studentId=${selectedStudent}`, {headers: {Authorization: token}}).then(res => res.json()).then(val => {
 				val['lessonSchedule'].map(i => i.weekday = toMomentWeekDays[i.dayOfWeek])
 				setDataList(val)
-			}).finally(() =>
+				calcWeekScore(val)
+			}).finally(() => {
 				setIsLoading(false)
-			);
+			})
 		}
 	}, [toggleFetch, selectedStudent]);
+
+	const calcWeekScore = useCallback((data) => {
+		let weekNumber = weeksFromStartOfTheYear;
+		let weekCountObject = weeksToBeCalculated[weekNumber];
+
+		while(!weekCountObject) {
+			weekCountObject = weeksToBeCalculated[weekNumber + 1]
+			weekNumber++;
+		};
+
+		const attendanceList = data['attendanceList'];
+		const lessonSchedule = data['lessonSchedule'];
+
+		console.log(data)
+
+
+		console.log(weekCountObject)
+		console.log(weekNumber)
+	}, [])
 
 	const dateCellRender = (value) => {
 		const weekday = value.weekday();
