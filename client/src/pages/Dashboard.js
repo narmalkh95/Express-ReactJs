@@ -4,17 +4,19 @@ import ClassTable from "../components/ClassTable/ClassTable";
 import PermissionWrapper from "../components/PermissionWrapper/PermissionWrapper";
 import UploadForm from "../components/FileUpload/FileUpload";
 import AttendanceTable from "../components/AttendanceTable";
-
+import styles from './Dashboard.module.css'
 
 const Dashboard = () => {
     return (
-        <div>
-            <PermissionWrapper userPermissions={['Admin']}>
-              <QRCodeGenerator/>
-               <UploadForm />
-            </PermissionWrapper>
-            <ClassTable/>
-            <AttendanceTable/>
+        <div className={styles.dashboardContainer}>
+            <div className={styles.qrCodeContainer}>
+                <QRCodeGenerator />
+            </div>
+            <div className={styles.uploadFormContainer}>
+                <PermissionWrapper userPermissions={['Admin', 'Student']}>
+                    <UploadForm />
+                </PermissionWrapper>
+            </div>
         </div>
     );
 };

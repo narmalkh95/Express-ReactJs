@@ -1,13 +1,11 @@
 import React from 'react';
 import { Layout } from 'antd';
-import Sidebar from "../components/Sidebar/Sidebar";
-
 const { Content } = Layout;
 
-const AppLayout = ({ children }) => {
+const AppLayout = ({Component, children }) => {
     return (
         <Layout style={{ minHeight: '100vh' }}>
-            <Sidebar />
+            {Component}
             <Layout>
                 <Content>{children}</Content>
             </Layout>

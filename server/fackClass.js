@@ -38,20 +38,20 @@ async function generateMockData() {
 
         // Create teachers
         const teachersArr = [
-            { username: 'Մկրտչյան Գ.', email: 'test@email.com1', role: rolesObj[ROLES.ADMIN], password: 'fakepassword' },
-            { username: 'Ամիրբեկյան Ն.', email: 'test@email.com2', role: rolesObj[ROLES.ADMIN], password: 'fakepassword' },
-            { username: 'Ուսեպյան Մ.', email: 'test@email.com3', role: rolesObj[ROLES.ADMIN], password: 'fakepassword' },
-            { username: 'Հովհաննիսյան Է.', email: 'test@email.com4', role: rolesObj[ROLES.ADMIN], password: 'fakepassword' },
-            { username: 'Համբարձումյան Ք.', email: 'test@email.com5', role: rolesObj[ROLES.ADMIN], password: 'fakepassword' },
-            { username: 'Հարությունյան Լ.', email: 'test@email.com6', role: rolesObj[ROLES.ADMIN], password: 'fakepassword' },
-            { username: 'Գանովիչ Տ.', email: 'test@email.com7', role: rolesObj[ROLES.ADMIN], password: 'fakepassword' },
-            { username: 'Տոմեյան Գ.', email: 'test@email.com8', role: rolesObj[ROLES.ADMIN], password: 'fakepassword' },
-            { username: 'Խեմչյան Ա.', email: 'test@email.com9', role: rolesObj[ROLES.ADMIN], password: 'fakepassword' },
-            { username: 'Օբոյանցև Վ.', email: 'test@email.com10', role: rolesObj[ROLES.ADMIN], password: 'fakepassword' },
-            { username: 'Մանուկյան Ա.', email: 'test@email.com11', role: rolesObj[ROLES.ADMIN], password: 'fakepassword' },
-            { username: 'Մարկոսյան Մ.', email: 'test@email.com12', role: rolesObj[ROLES.ADMIN], password: 'fakepassword' },
-            { username: 'Սարգսյան Ս.', email: 'test@email.com13', role: rolesObj[ROLES.ADMIN], password: 'fakepassword' },
-            { username: 'Ղազարյան Մ.', email: 'test@email.com14', role: rolesObj[ROLES.ADMIN], password: 'fakepassword' },
+            { username: 'Մկրտչյան Գ.', email: 'test@email.com1', role: rolesObj[ROLES.ADMIN], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
+            { username: 'Ամիրբեկյան Ն.', email: 'test@email.com2', role: rolesObj[ROLES.ADMIN], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
+            { username: 'Ուսեպյան Մ.', email: 'test@email.com3', role: rolesObj[ROLES.ADMIN], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
+            { username: 'Հովհաննիսյան Է.', email: 'test@email.com4', role: rolesObj[ROLES.ADMIN], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
+            { username: 'Համբարձումյան Ք.', email: 'test@email.com5', role: rolesObj[ROLES.ADMIN], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
+            { username: 'Հարությունյան Լ.', email: 'test@email.com6', role: rolesObj[ROLES.ADMIN], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
+            { username: 'Գանովիչ Տ.', email: 'test@email.com7', role: rolesObj[ROLES.ADMIN], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
+            { username: 'Տոմեյան Գ.', email: 'test@email.com8', role: rolesObj[ROLES.ADMIN], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
+            { username: 'Խեմչյան Ա.', email: 'test@email.com9', role: rolesObj[ROLES.ADMIN], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
+            { username: 'Օբոյանցև Վ.', email: 'test@email.com10', role: rolesObj[ROLES.ADMIN], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
+            { username: 'Մանուկյան Ա.', email: 'test@email.com11', role: rolesObj[ROLES.ADMIN], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
+            { username: 'Մարկոսյան Մ.', email: 'test@email.com12', role: rolesObj[ROLES.ADMIN], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
+            { username: 'Սարգսյան Ս.', email: 'test@email.com13', role: rolesObj[ROLES.ADMIN], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
+            { username: 'Ղազարյան Մ.', email: 'test@email.com14', role: rolesObj[ROLES.ADMIN], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
         ];
 
         const teachers = await User.insertMany(teachersArr);
@@ -77,20 +77,20 @@ async function generateMockData() {
 
         // Create students
         const studentsArr = [
-            { username: 'Ուսանող Մկրտչյան Գ.', email: 'student@email.com1', role: rolesObj[ROLES.STUDENT], password: 'fakepassword' },
-            { username: 'Ուսանող Ամիրբեկյան Ն.', email: 'student@email.com2', role: rolesObj[ROLES.STUDENT], password: 'fakepassword' },
-            { username: 'Ուսանող Ուսեպյան Մ.', email: 'student@email.com3', role: rolesObj[ROLES.STUDENT], password: 'fakepassword' },
-            { username: 'Ուսանող Հովհաննիսյան Է.', email: 'student@email.com4', role: rolesObj[ROLES.STUDENT], password: 'fakepassword' },
-            { username: 'Ուսանող Համբարձումյան Ք.', email: 'student@email.com5', role: rolesObj[ROLES.STUDENT], password: 'fakepassword' },
-            { username: 'Ուսանող Հարությունյան Լ.', email: 'student@email.com6', role: rolesObj[ROLES.STUDENT], password: 'fakepassword' },
-            { username: 'Ուսանող Գանովիչ Տ.', email: 'student@email.com7', role: rolesObj[ROLES.STUDENT], password: 'fakepassword' },
-            { username: 'Ուսանող Տոմեյան Գ.', email: 'student@email.com8', role: rolesObj[ROLES.STUDENT], password: 'fakepassword' },
-            { username: 'Ուսանող Խեմչյան Ա.', email: 'student@email.com9', role: rolesObj[ROLES.STUDENT], password: 'fakepassword' },
-            { username: 'Ուսանող Օբոյանցև Վ.', email: 'student@email.com10', role: rolesObj[ROLES.STUDENT], password: 'fakepassword' },
-            { username: 'Ուսանող Մանուկյան Ա.', email: 'student@email.com11', role: rolesObj[ROLES.STUDENT], password: 'fakepassword' },
-            { username: 'Ուսանող Մարկոսյան Մ.', email: 'student@email.com12', role: rolesObj[ROLES.STUDENT], password: 'fakepassword' },
-            { username: 'Ուսանող Սարգսյան Ս.', email: 'student@email.com13', role: rolesObj[ROLES.STUDENT], password: 'fakepassword' },
-            { username: 'Ուսանող Ղազարյան Մ.', email: 'student@email.com14', role: rolesObj[ROLES.STUDENT], password: 'fakepassword' },
+            { username: 'Ուսանող Մկրտչյան Գ.', email: 'student@email.com1', role: rolesObj[ROLES.STUDENT], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
+            { username: 'Ուսանող Ամիրբեկյան Ն.', email: 'student@email.com2', role: rolesObj[ROLES.STUDENT], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
+            { username: 'Ուսանող Ուսեպյան Մ.', email: 'student@email.com3', role: rolesObj[ROLES.STUDENT], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
+            { username: 'Ուսանող Հովհաննիսյան Է.', email: 'student@email.com4', role: rolesObj[ROLES.STUDENT], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
+            { username: 'Ուսանող Համբարձումյան Ք.', email: 'student@email.com5', role: rolesObj[ROLES.STUDENT], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
+            { username: 'Ուսանող Հարությունյան Լ.', email: 'student@email.com6', role: rolesObj[ROLES.STUDENT], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
+            { username: 'Ուսանող Գանովիչ Տ.', email: 'student@email.com7', role: rolesObj[ROLES.STUDENT], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
+            { username: 'Ուսանող Տոմեյան Գ.', email: 'student@email.com8', role: rolesObj[ROLES.STUDENT], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
+            { username: 'Ուսանող Խեմչյան Ա.', email: 'student@email.com9', role: rolesObj[ROLES.STUDENT], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
+            { username: 'Ուսանող Օբոյանցև Վ.', email: 'student@email.com10', role: rolesObj[ROLES.STUDENT], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
+            { username: 'Ուսանող Մանուկյան Ա.', email: 'student@email.com11', role: rolesObj[ROLES.STUDENT], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
+            { username: 'Ուսանող Մարկոսյան Մ.', email: 'student@email.com12', role: rolesObj[ROLES.STUDENT], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
+            { username: 'Ուսանող Սարգսյան Ս.', email: 'student@email.com13', role: rolesObj[ROLES.STUDENT], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
+            { username: 'Ուսանող Ղազարյան Մ.', email: 'student@email.com14', role: rolesObj[ROLES.STUDENT], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
         ];
 
         const students = await User.insertMany(studentsArr);

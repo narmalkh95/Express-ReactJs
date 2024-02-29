@@ -99,8 +99,8 @@ const ClassTable = () => {
 	}, [data]);
 
 	return (
-		<div>
-			<div>
+		<div style={{padding:'20px'}}>
+			<div >
 				<Button type="primary" onClick={() => setIsLessonModalOpen(true)}>
 					Ստեղծել նոր դասաժամ
 				</Button>

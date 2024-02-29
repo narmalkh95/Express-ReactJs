@@ -2,8 +2,8 @@ import {useEffect, useMemo, useState} from "react";
 import * as auth from "../../helpers/auth";
 import {SERVER_HOST_IP} from "../../constants/config";
 import React from 'react';
-import {Button, Calendar, Select, Form} from 'antd';
-import {attendanceStatus, attendanceStatusTranslate, toMomentWeekDays} from "../../constants/utils";
+import { Button, Calendar, Select, Form } from 'antd';
+import { attendanceStatus, attendanceStatusTranslate, toMomentWeekDays } from "../../constants/utils";
 import './index.css';
 import StatusChangeModal from "./StatusChangeModal";
 import {getRoles} from "../../helpers/auth";
@@ -34,9 +34,9 @@ const AttendanceTable = () => {
 			fetch(`http://${SERVER_HOST_IP}/attendance?studentId=${selectedStudent}`, {headers: {Authorization: token}}).then(res => res.json()).then(val => {
 				val['lessonSchedule'].map(i => i.weekday = toMomentWeekDays[i.dayOfWeek])
 				setDataList(val)
-			}).finally(() => {
+			}).finally(() =>
 				setIsLoading(false)
-			})
+			);
 		}
 	}, [toggleFetch, selectedStudent]);
 

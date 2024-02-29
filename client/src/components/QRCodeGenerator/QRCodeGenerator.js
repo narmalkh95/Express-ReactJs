@@ -9,8 +9,12 @@ const QRCodeGenerator = () => {
 
 
     return (
-        <div>
-            <h2>QR Code</h2>
+        <div style={{
+            display:'flex',
+            flexDirection: 'column',
+            alignItems:'center'
+        }}>
+             <h2>Սկանավորեq QR կոդը</h2>
              <QRCode value={qrData} />
         </div>
     );

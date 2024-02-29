@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {uploadFile} from "../../slice/uploadSlice";
 import styles from './UploadForm.module.css'
-import { Form, Input, Button } from 'antd';
+import {Form, Input, Button, Card} from 'antd';
 
 const UploadForm = () => {
     const [file, setFile] = useState(null);
@@ -21,22 +21,24 @@ const UploadForm = () => {
     };
 
     return (
-        <Form>
-            <Form.Item name="message" rules={[{ required: true, message: 'Please input your message!' }]}>
-                <Input.TextArea rows={4} placeholder="Դեր նամակը" maxLength={6} />
-            </Form.Item>
-            <Form.Item>
-                <div className="custom-file">
-                    <input type='file' className="custom-file-input" id='customFile' onChange={onChange}/>
-                    <label className="custom-file-label" htmlFor='customFile'>
-                        {fileName}
-                    </label>
-                </div>
-            </Form.Item>
-            <Form.Item>
-                <Button type="primary" onSubmit={onSubmit} htmlType="submit" >Upload</Button>
-            </Form.Item>
-        </Form>
+        <Card className={styles.uploadCard}>
+            <Form layout="vertical">
+                <Form.Item name="message" rules={[{ required: true, message: 'Please input your message!' }]}>
+                    <Input.TextArea rows={4} placeholder="Դեր նամակը" maxLength={6} />
+                </Form.Item>
+                <Form.Item>
+                    <div className="custom-file">
+                        <input type='file' className="custom-file-input" id='customFile' onChange={onChange} />
+                        <label className="custom-file-label" htmlFor='customFile'>
+                            {fileName}
+                        </label>
+                    </div>
+                </Form.Item>
+                <Form.Item>
+                    <Button type="primary" onClick={onSubmit} htmlType="submit" loading={uploading}>Upload</Button>
+                </Form.Item>
+            </Form>
+        </Card>
     );
 };
 

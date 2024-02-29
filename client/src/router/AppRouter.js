@@ -7,7 +7,9 @@ import AppLayout from "../layout/AppLayout";
 import ThankYouPage from "../pages/ThankYouPage/ThankYouPage";
 import NotFoundPage from "../pages/404/NotFoundPage";
 import {useSelector} from "react-redux";
-import PublicRoute from "./PublicRoute";
+import AttendancePage from "../pages/Attendance/AttendancePage";
+import MenuComponent from "../components/Menu/MenuComponent";
+import ClassPage from "../pages/Class/ClassPage";
 
 const AppRouter = () => {
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -15,27 +17,44 @@ const AppRouter = () => {
     return (
         <Router>
 
-                <Routes>
-                    {isAuthenticated ? (
-                        <Route path="/login" element={<Navigate to="/dashboard" replace />} />
-                    ) : (
-                        <Route path="/login" element={<Login />} />
-                    )}
-                    <Route
-                        path="/"
-                        element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Login />}
-                    />
-                    <Route path="/thank-you" element={<ThankYouPage />} />
-                        <Route exact path='/dashboard' element={
-                         <PrivateRoute
-                             children={
-                             <AppLayout>
+            <Routes>
+                {isAuthenticated ? (
+                    <Route path="/login" element={<Navigate to="/dashboard" replace/>}/>
+                ) : (
+                    <Route path="/login" element={<Login/>}/>
+                )}
+                <Route
+                    path="/"
+                    element={isAuthenticated ? <Navigate to="/dashboard" replace/> : <Login/>}
+                />
+                <Route path="/thank-you" element={<ThankYouPage/>}/>
+                <Route exact path='/dashboard' element={
+                    <PrivateRoute
+                        children={
+                            <AppLayout Component={<MenuComponent />}>
                                 <Dashboard/>
-                             </AppLayout>
-                         } requiredRoles={['admin']}/>} />
-                     <Route path='*' element={<NotFoundPage />} />
+                            </AppLayout>
+                        }/>}/>
+                <Route exact path='/class/create' element={
+                    <PrivateRoute
+                        children={
+                            <AppLayout Component={<MenuComponent />}>
+                                <ClassPage/>
+                            </AppLayout>
+                        }/>}/>
 
-                </Routes>
+                <Route exact path='/attendance' element={
+                    <PrivateRoute
+                        children={
+                            <AppLayout Component={<MenuComponent isHeader={true}/>}>
+                                <AttendancePage/>
+                            </AppLayout>
+                        }/>}/>
+
+
+                <Route path='*' element={<NotFoundPage/>}/>
+
+            </Routes>
         </Router>
     );
 };
