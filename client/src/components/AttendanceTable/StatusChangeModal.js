@@ -11,8 +11,6 @@ const StatusChangeModal = ({isOpen, onCancel, onSuccess, students}) => {
 	const [selectedTimeSlotId, setSelectedTimeSlotId] = useState('');
 	const [selectedStatus, setSelectedStatus] = useState('');
 
-
-
 	useEffect(() => {
 		if (selectedStudentId && selectedDate) {
 
@@ -25,7 +23,7 @@ const StatusChangeModal = ({isOpen, onCancel, onSuccess, students}) => {
 			const filteredAttendanceList = student?.attendanceList?.filter(i => i.date === selectedDate);
 
 			return filteredAttendanceList.map(a => {
-				return {value: a['_id'], label: a['timeSlot']}
+				return {value: a['_id'], label: a['timeSlot'] + ' ' + a.classType || ''}
 			})
 		}
 
@@ -60,7 +58,7 @@ const StatusChangeModal = ({isOpen, onCancel, onSuccess, students}) => {
 		})
 	}, [students])
 
-	return (<Modal title="Փոխել կարգավիճակը" open={isOpen} onCancel={onCancel} footer={null}>
+	return (<Modal title="Փոխել կարգավիճակը" open={isOpen} onCancel={onCancel} footer={null} destroyOnClose={true}>
 			<Form.Item key={'student'} name={'student'} label={'Ուսանող'}
 			           rules={[{required: true, message: 'Պարտադիտ դաշտ:'}]}>
 				<Select

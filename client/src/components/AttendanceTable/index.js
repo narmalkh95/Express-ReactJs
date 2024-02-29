@@ -108,8 +108,7 @@ const AttendanceTable = () => {
 		return (
 			<ul className="events">
 				{currentLessonSchedule.map((i, index) => {
-					const status = attendanceList.find(a => a.timeSlot === i.timeSlot)?.status;
-					//`Todo handle classTypes check as we can have multiple items with same timeSlot.
+					const status = attendanceList.find(a => a.timeSlot === i.timeSlot && a.classType === i.classType?.name)?.status;
 
 					return (
 						<p style={{fontSize: 8}} key={index}>

@@ -15,7 +15,8 @@ const userSchema = new mongoose.Schema({
     attendanceList: [{
         date: String,
         timeSlot: String,
-        status: String
+        status: String,
+        classType: String
     }]
 });
 

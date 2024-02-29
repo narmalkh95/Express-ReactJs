@@ -178,7 +178,7 @@ async function generateMockData() {
             },
         ]);
 
-        await createFakeAttendanceListData(groups, students);
+        await createFakeAttendanceListData(groups, students, classTypes);
 
     } catch (error) {
         console.error('Error generating mock data:', error);
@@ -187,7 +187,7 @@ async function generateMockData() {
     }
 }
 
-const createFakeAttendanceListData = async(groups, students) => {
+const createFakeAttendanceListData = async(groups, students, classTypes) => {
     try {
         // const uri = 'mongodb://localhost:27017/mydb';
         // await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -217,7 +217,9 @@ const createFakeAttendanceListData = async(groups, students) => {
             const studentLessonSchedule = groups.filter(group => group.students.includes(student._id))[0].lessonSchedule;
 
             studentsData[student._id] = studentLessonSchedule.map(i => {
-                return {dayOfWeek: toMomentWeekDays[i.dayOfWeek], timeSlot: i.timeSlot}
+                const classType = classTypes.find(c => c._id === i.classType);
+
+                return {dayOfWeek: toMomentWeekDays[i.dayOfWeek], timeSlot: i.timeSlot, classType: classType?.name}
             });
         })
 
@@ -235,7 +237,8 @@ const createFakeAttendanceListData = async(groups, students) => {
                     const attendanceObj = {
                         date: m.format('DD-MM-YYYY'),
                         timeSlot: lesson.timeSlot,
-                        status: attendanceValues[Math.floor(Math.random() * 2)]
+                        status: attendanceValues[Math.floor(Math.random() * 2)],
+                        classType: lesson?.classType
                     };
 
                     user.attendanceList.push(attendanceObj);
