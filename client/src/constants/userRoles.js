@@ -1,4 +1,5 @@
 export default {
-	admin: 1,
-	user: 2
+	admin: "Admin",
+	teacher: "Teacher",
+	student: 'Student'
 }

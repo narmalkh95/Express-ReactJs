@@ -5,19 +5,13 @@ import * as auth from "../../helpers/auth";
 import moment from "moment";
 import {attendanceStatus, attendanceStatusTranslate} from "../../constants/utils";
 
-const StatusChangeModal = ({isOpen, onCancel, onSuccess}) => {
-	const [students, setStudents] = useState([]);
+const StatusChangeModal = ({isOpen, onCancel, onSuccess, students}) => {
 	const [selectedStudentId, setSelectedStudentId] = useState('');
 	const [selectedDate, setSelectedDate] = useState('');
 	const [selectedTimeSlotId, setSelectedTimeSlotId] = useState('');
 	const [selectedStatus, setSelectedStatus] = useState('');
 
-	useEffect(() => {
-		const token = auth.getToken();
-		fetch(`http://${SERVER_HOST_IP}/students`, {headers: {Authorization: token}}).then(res => res.json()).then(val => {
-			setStudents(val)
-		})
-	}, []);
+
 
 	useEffect(() => {
 		if (selectedStudentId && selectedDate) {
