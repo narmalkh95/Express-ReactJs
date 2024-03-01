@@ -16,4 +16,12 @@ const toMomentWeekDays = {
 	[availableWeekDays.friday]: 5,
 }
 
-module.exports = {availableTimeslots, availableWeekDays, toMomentWeekDays};
+const dateOffNumbers = {
+	1 : 'Երկուշաբթի',
+	2 : 'Երեքշաբթի',
+	3 : 'Չորեքշաբթի',
+	4 : 'հինգշաբթի',
+	5 : 'Ուրբաթ',
+}
+
+module.exports = {availableTimeslots, availableWeekDays, toMomentWeekDays, dateOffNumbers};
