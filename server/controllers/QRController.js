@@ -21,47 +21,77 @@ router.get('/verify', async (req, res) => {
 		return res.status(401).json({message: 'Invalid username'});
 	}
 
-	const currentWeekdayName = moment().format('dddd').toLowerCase();
+	const currentWeekdayName = 'monday';// moment().format('dddd').toLowerCase();
 
-	Group.find({}).populate('lessonSchedule.classType').populate('lessonSchedule.room').populate('lessonSchedule.teacher')
+	Group.find({})
+		.populate('lessonSchedule.classType')
+		.populate('lessonSchedule.room')
+		.populate('lessonSchedule.teacher')
 		.then(groups => {
-			const currentGroupLessonSchedules = groups.filter(group => group.students.includes(decoded.userId))[0].lessonSchedule;
-			const todaysLessonSchedules = currentGroupLessonSchedules.filter(lesson => lesson.dayOfWeek === availableWeekDays[currentWeekdayName]);
-			const format = 'hh:mm';
-			const time = moment(moment().format(format), format);
+			// Filter groups where the user is a student
+			const currentGroup = groups.find(group => group.students.includes(decoded.userId));
 
-			const exactLesson = todaysLessonSchedules.filter(lesson => {
+			if (!currentGroup) {
+				return res.json('You are not enrolled in any groups');
+			}
+
+			const currentGroupLessonSchedules = currentGroup.lessonSchedule;
+
+			if (!currentGroupLessonSchedules || !Array.isArray(currentGroupLessonSchedules) || currentGroupLessonSchedules.length === 0) {
+				return res.json('There are no lesson schedules available');
+			}
+
+			const todaysLessonSchedules = currentGroupLessonSchedules.filter(lesson => lesson.dayOfWeek === availableWeekDays[currentWeekdayName]);
+			//const format = 'hh:mm';
+			//const time = moment(moment().format(format), format);
+			//console.log(time,'time');
+			const date = "01-01-2024";
+			const time2 = "9:35";
+
+			const format = 'DD-MM-YYYY HH:mm';
+			const time = moment(date + ' ' + time2, format);
+
+			console.log(time);
+log
+			const exactLesson = todaysLessonSchedules.find(lesson => {
 				const [startH, endH] = lesson.timeSlot.split(' - ');
 				const beforeTime = moment(startH, format);
 				const afterTime = moment(endH, format);
 
-				return time.isBetween(beforeTime, afterTime)
+				return time.isBetween(beforeTime, afterTime);
 			});
 
-			if (!exactLesson.length) {
-				return res.json('You do not have any lesson for now')
+			if (!exactLesson) {
+				return res.json('You do not have any lesson for now');
 			}
 
-			const [startH, endH] = exactLesson[0].timeSlot.split(' - ');
+			const [startH, endH] = exactLesson.timeSlot.split(' - ');
 			const startTime = moment(startH, format);
 			const duration = moment.duration(startTime.diff(time));
 			const minutesDifference = duration.asMinutes();
-			const durationOfTheLessonInMinutes = 80; //1:20 hour
+			const durationOfTheLessonInMinutes = 80; // 1:20 hour
 
-			const status = durationOfTheLessonInMinutes - minutesDifference < 10 ? attendanceStatus.inTime : attendanceStatus.late
+			const status = minutesDifference < 10 ? attendanceStatus.inTime : attendanceStatus.late;
 
 			user.attendanceList.push({
 				date: moment().format('DD-MM-YYYY'),
-				timeSlot: exactLesson[0].timeSlot,
+				timeSlot: exactLesson.timeSlot,
 				status: status,
-				classType: exactLesson[0]?.classType.name
+				classType: exactLesson.classType?.name // Ensure classType exists before accessing its name
 			});
 
-			user.save()
+			user.save();
 
 			res.json('You have successfully registered your time');
-			res.redirect(`http://${HOST}:3000/thank-you`);
+			res.redirect(`https://6b87-217-113-22-35.ngrok-free.app/thank-you`);
 		})
+		.catch(error => {
+			console.error('Error:', error);
+			res.status(500).json('Internal Server Error');
+		});
+
+
+	///res.redirect(`http://${HOST}:3000/thank-you`);
 });
 
 module.exports = router;
