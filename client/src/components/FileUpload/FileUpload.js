@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { uploadFile } from "../../slice/uploadSlice";
-import styles from './UploadForm.module.css'
-import { Form, Input, Button, Card } from 'antd';
-import { message as messageAntd } from 'antd';
+import { Form, Input, Button, Card, message as messageAntd } from 'antd';
 import * as auth from "../../helpers/auth";
 
 const UploadForm = () => {
@@ -12,7 +10,7 @@ const UploadForm = () => {
     const [message, setMessage] = useState('');
     const [form] = Form.useForm();
     const dispatch = useDispatch();
-    const { uploading, uploadedFile, error } = useSelector((state) => state.upload);
+    const { uploading, error } = useSelector((state) => state.upload);
 
     const onChange = (e) => {
         setFile(e.target.files[0]);
@@ -22,6 +20,33 @@ const UploadForm = () => {
     const onMessageChange = (e) => {
         setMessage(e.target.value);
     };
+
+    const customFileStyle = {
+        position: 'relative',
+        overflow: 'hidden',
+        display: 'inline-block',
+    };
+
+    const customFileInputStyle = {
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        margin: 0,
+        padding: 0,
+        fontSize: '20px',
+        cursor: 'pointer',
+        opacity: 0,
+    };
+
+    const customFileLabelStyle = {
+        display: 'inline-block',
+        padding: '5px 10px',
+        fontSize: '14px',
+        cursor: 'pointer',
+        border: '2px solid rgb(208 218 227 / 71%)',
+        borderRadius: '5px',
+        backgroundColor: '#fff',
+     };
 
     const onFinish = async () => {
         if (!file || !message) {
@@ -41,16 +66,23 @@ const UploadForm = () => {
     };
 
     return (
-        <Card className={styles.uploadCard}>
+        <Card style={{
+            width: '400px',
+            margin: '0 auto',
+            padding: '20px',
+            borderRadius: '8px',
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+            marginTop: '50px',
+        }}>
             <Form form={form} layout="vertical" onFinish={onFinish}>
                 <Form.Item name="message" rules={[{ required: true, message: 'Please input your message!' }]}>
                     <Input.TextArea value={message} onChange={onMessageChange} rows={4} placeholder="Դեր նամակը" maxLength={6} />
                 </Form.Item>
                 <Form.Item>
-                    <div className="custom-file">
-                        <input type='file' className="custom-file-input" id='customFile' onChange={onChange} />
-                        <label className="custom-file-label" htmlFor='customFile'>
-                            {fileName}
+                    <div style={customFileStyle}>
+                        <input type='file' style={customFileInputStyle} id='customFile' onChange={onChange} />
+                        <label style={customFileLabelStyle} htmlFor='customFile'>
+                            {fileName ? fileName :'Ընտրեք ֆայլ'  }
                         </label>
                     </div>
                 </Form.Item>

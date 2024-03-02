@@ -35,7 +35,7 @@ export const uploadFile = (file,text, token) => async (dispatch) => {
         // const axiosInstance = axios.create({
         //     baseURL: SERVER_HOST_IP, // Replace your_port_number with the port you are using
         // });
-        const res = await axios.post(`http://${SERVER_HOST_IP}/upload/file`, formData, {
+        const res = await axios.post(`${SERVER_HOST_IP}/upload/file`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 Authorization: token

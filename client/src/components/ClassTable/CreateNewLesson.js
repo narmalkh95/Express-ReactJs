@@ -1,5 +1,5 @@
 import {Button, Form, Modal, Select} from "antd";
-import { useCreateLessonMutation, useGetLessonsMutation } from "../../features/classApi";
+import { useCreateLessonMutation } from "../../features/classApi";
 import {useEffect, useState} from "react";
 import {SERVER_HOST_IP} from "../../constants/config";
 import * as auth from "../../helpers/auth";
@@ -14,12 +14,12 @@ const labelTranslate = {
 };
 
 const CreateNewLesson = ({isOpen, onCancel, getLessons}) => {
-	const [createLesson, {data, isSuccess,isError, isLoading, error}] = useCreateLessonMutation();
+	const [createLesson, {isLoading, error}] = useCreateLessonMutation();
 	const [params, setParams] = useState(null);
 
 	useEffect(() => {
 		const token = auth.getToken();
-		fetch(`http://${SERVER_HOST_IP}/class/params`, {headers: {Authorization: token}}).then(res => res.json()).then(val => {
+		fetch(`${SERVER_HOST_IP}/class/params`, {headers: {Authorization: token}}).then(res => res.json()).then(val => {
 			setParams(val)
 		})
 	}, []);

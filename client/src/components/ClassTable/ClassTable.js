@@ -32,7 +32,7 @@ const columns = [
 
 const ClassTable = () => {
 	const [isLessonModalOpen, setIsLessonModalOpen] = useState(false);
-	const [getLessons, {data, isSuccess, isError, isLoading, error}] = useGetLessonsMutation();
+	const [getLessons, {data, isLoading}] = useGetLessonsMutation();
 
 	useEffect(() => {
 		getLessons();
@@ -44,7 +44,7 @@ const ClassTable = () => {
 			const token = auth.getToken();
 			setTimeout(() => {
 				fetch(
-					`http://${SERVER_HOST_IP}/class/delete`,
+					`${SERVER_HOST_IP}/class/delete`,
 					{
 						method: 'POST',
 						body: JSON.stringify({lessonScheduleId, groupId}),

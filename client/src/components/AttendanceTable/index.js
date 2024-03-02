@@ -9,7 +9,6 @@ import StatusChangeModal from "./StatusChangeModal";
 import {getRoles} from "../../helpers/auth";
 import UserRoles from "../../constants/userRoles";
 import dayjs from "dayjs";
-import moment from "moment";
 
 const weeksToBeCalculated = {
 	16: {
@@ -33,12 +32,11 @@ const AttendanceTable = () => {
 	const [students, setStudents] = useState([]);
 	const [selectedStudent, setSelectedStudent] = useState(null);
 	const [calendarDate, setCalendarDate ] = useState(() => dayjs('2024-01-01'));
-	const weeksFromStartOfTheYear = moment(new Date()).diff(moment(calendarDate.format('YYYY-MM-DD'), 'YYYY-MM-DD'), 'week');
 	const [scoreObj, setScoreObj] = useState(null);
 
 	useEffect(() => {
 		const token = auth.getToken();
-		fetch(`http://${SERVER_HOST_IP}/students`, {headers: {Authorization: token}}).then(res => res.json()).then(val => {
+		fetch(`${SERVER_HOST_IP}/students`, {headers: {Authorization: token}}).then(res => res.json()).then(val => {
 			setStudents(val)
 		})
 	}, []);
@@ -46,7 +44,7 @@ const AttendanceTable = () => {
 	useEffect(() => {
 		if (isStudentRole || (!isStudentRole && !!selectedStudent)) {
 			const token = auth.getToken();
-			fetch(`http://${SERVER_HOST_IP}/attendance?studentId=${selectedStudent}`, {headers: {Authorization: token}}).then(res => res.json()).then(val => {
+			fetch(`${SERVER_HOST_IP}/attendance?studentId=${selectedStudent}`, {headers: {Authorization: token}}).then(res => res.json()).then(val => {
 				val['lessonSchedule'].map(i => i.weekday = toMomentWeekDays[i.dayOfWeek])
 				setDataList(val)
 				calcWeekScore(val)
@@ -57,14 +55,6 @@ const AttendanceTable = () => {
 	}, [toggleFetch, selectedStudent]);
 
 	const calcWeekScore = useCallback((data) => {
-		//Uncomment this for real use case.
-		// let weekNumber = weeksFromStartOfTheYear;
-		// let weekCountObject = weeksToBeCalculated[weekNumber];
-		//
-		// while(!weekCountObject) {
-		// 	weekCountObject = weeksToBeCalculated[weekNumber + 1]
-		// 	weekNumber++;
-		// }
 
 		let weekNumber = 16;
 		let weekCountObject = weeksToBeCalculated[weekNumber];

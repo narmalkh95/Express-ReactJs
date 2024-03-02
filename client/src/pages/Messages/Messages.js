@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { SERVER_HOST_IP } from "../../constants/config";
-import * as auth from "../../helpers/auth"; // Import your authentication helper
+import * as auth from "../../helpers/auth";
 import { Table, Spin, Alert } from 'antd';
 
 const Messages = () => {
@@ -14,7 +14,7 @@ const Messages = () => {
         const fetchFiles = async () => {
             try {
                 const token = auth.getToken(); // Get the JWT token from your authentication helper
-                const response = await axios.get(`http://${SERVER_HOST_IP}/messages?page=${pagination.current}&limit=${pagination.pageSize}`, {
+                const response = await axios.get(`${SERVER_HOST_IP}/messages?page=${pagination.current}&limit=${pagination.pageSize}`, {
                     headers: {
                         Authorization: `${token}` // Include the JWT token in the authorization header
                     }
@@ -32,7 +32,7 @@ const Messages = () => {
         };
 
         fetchFiles();
-    }, [pagination.current, pagination.pageSize]);
+    }, [pagination]);
 
     const handleTableChange = (pagination) => {
         setPagination(pagination);

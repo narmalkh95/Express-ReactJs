@@ -47,12 +47,12 @@ const MenuComponent = ({ isHeader }) => {
                         <Link to="/class/create">Դասացուցակ</Link>
                     </Menu.Item>
                 </PermissionWrapper>
-                <PermissionWrapper userPermissions={['Admin']}>
+                <PermissionWrapper userPermissions={['Admin','Student']}>
                     <Menu.Item key="2" icon={<DashboardOutlined />}>
                         <Link to="/dashboard">Հիմնական</Link>
                     </Menu.Item>
                 </PermissionWrapper>
-                <PermissionWrapper userPermissions={['Admin', 'Student']}>
+                <PermissionWrapper userPermissions={['Admin']}>
                     <Menu.Item key="3" icon={<DashboardOutlined />}>
                         <Link to="/messages">Հաղորդագրություն</Link>
                     </Menu.Item>

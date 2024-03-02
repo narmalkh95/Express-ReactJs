@@ -14,7 +14,7 @@ const QRCodeGenerator = () => {
             flexDirection: 'column',
             alignItems:'center'
         }}>
-             <h2>Սկանավորեq QR կոդը</h2>
+             <h2>Սկանավորեք QR կոդը</h2>
              <QRCode value={qrData} />
         </div>
     );

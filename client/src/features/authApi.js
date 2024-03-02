@@ -5,7 +5,7 @@ import {SERVER_HOST_IP} from "../constants/config";
 
 export const authApi = createApi({
     reducerPath: 'authApi',
-    baseQuery: fetchBaseQuery({ baseUrl: `http://${SERVER_HOST_IP}`,}),
+    baseQuery: fetchBaseQuery({ baseUrl: `${SERVER_HOST_IP}`,}),
     endpoints: (builder) => ({
         login: builder.mutation({
             query: ({ email, password }) => ({

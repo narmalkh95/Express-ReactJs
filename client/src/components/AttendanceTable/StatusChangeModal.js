@@ -35,7 +35,7 @@ const StatusChangeModal = ({isOpen, onCancel, onSuccess, students}) => {
 			const obj = {selectedStatus, selectedTimeSlotId, selectedDate, selectedStudentId}
 			const token = auth.getToken();
 
-			fetch(`http://${SERVER_HOST_IP}/students`, {
+			fetch(`${SERVER_HOST_IP}/students`, {
 				method: 'POST',
 				body: JSON.stringify(obj),
 				headers: {'Content-Type': 'application/json', Authorization: token}
