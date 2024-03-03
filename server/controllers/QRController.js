@@ -51,8 +51,7 @@ router.get('/verify', async (req, res) => {
 			const format = 'DD-MM-YYYY HH:mm';
 			const time = moment(date + ' ' + time2, format);
 
-			console.log(time);
-log
+			console.log(todaysLessonSchedules,'todaysLessonSchedules')
 			const exactLesson = todaysLessonSchedules.find(lesson => {
 				const [startH, endH] = lesson.timeSlot.split(' - ');
 				const beforeTime = moment(startH, format);

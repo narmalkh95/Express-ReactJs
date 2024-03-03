@@ -42,7 +42,7 @@ const MenuComponent = ({ isHeader }) => {
 
     const main = (
              <Menu  theme={"dark"} mode={isHeader ? "horizontal" : "inline"} selectedKeys={selectedKeys}>
-                <PermissionWrapper userPermissions={['Admin']}>
+                <PermissionWrapper userPermissions={['Admin', 'Student']}>
                     <Menu.Item key="1" icon={<HomeOutlined />}>
                         <Link to="/class/create">Դասացուցակ</Link>
                     </Menu.Item>

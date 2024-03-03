@@ -7,7 +7,6 @@ app.use(express.json());
 app.use(cors())
 
 const PORT = process.env.PORT || 8080;
-const HOST = process.env.HOST_IP || 'localhost';
 
 require('./db');
 
@@ -23,16 +22,16 @@ const messagesController = require('./controllers/messagesController');
 app.use('/qr', qrController);
 app.use('/', classController);
 
-app.use('/test', classRoutes)
+app.use('/test', classRoutes);
 
-app.use('/upload',uploadController)
-app.use('/messages',messagesController)
+app.use('/upload',uploadController);
+app.use('/messages',messagesController);
 
 app.post('/login', loginController);
 app.use('/attendance', attendanceController);
 app.use('/students', studentsController);
 
 
-app.listen(PORT,'',() => {
+app.listen(PORT,() => {
     console.log(`Server is listening on port ${PORT}`);
 });
