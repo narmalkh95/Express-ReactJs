@@ -1,15 +1,13 @@
 const mongoose = require('mongoose');
-const Course = require('./models/Course');
 const Group = require('./models/Group');
 const Room = require('./models/Room');
-const Teacher = require('./models/Teacher');
-const Student = require('./models/Student');
 const ClassType = require('./models/ClassType');
 const Role = require('./models/Role');
 const User = require('./models/User');
 const {ROLES, attendanceStatus} = require("./models/User");
-const {availableWeekDays, availableTimeslots, toMomentWeekDays} = require('./constants/index')
+const {availableWeekDays, availableTimeslots} = require('./constants/index')
 const moment = require('moment');
+const {toMomentWeekDays} = require("./constants");
 
 async function generateMockData() {
     try {
@@ -56,19 +54,6 @@ async function generateMockData() {
 
         const teachers = await User.insertMany(teachersArr);
 
-
-        const classTypes = await ClassType.create([
-            { name: 'Լաբ. 1'},
-            { name: 'Լաբ. 2'},
-            { name: 'Լաբ. 3'},
-            { name: 'Լաբ. 4'},
-            { name: 'Դաս.'},
-            { name: 'Գործ. 1'},
-            { name: 'Գործ. 2'},
-            { name: 'ԿԱ 1'},
-            { name: 'ԿԱ 2'},
-        ])
-
         // Create students
         const studentsArr = [
             { username: 'Կիրակոսյան Հայկ Սամվելի', email: 'kirakosyan_hayk019@polytechnic.am', role: rolesObj[ROLES.STUDENT], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
@@ -108,91 +93,126 @@ async function generateMockData() {
 
         const students = await User.insertMany(studentsArr);
 
+        const studentsGroupIds = {
+            1: students.slice(0, 9).map(s => s._id),
+            2: students.slice(9, 17).map(s => s._id),
+            3: students.slice(17, 25).map(s => s._id),
+            4: students.slice(25).map(s => s._id),
+        }
+
+        const classTypes = await ClassType.create([
+            { name: 'Լաբ. 1', students: studentsGroupIds[1]},
+            { name: 'Լաբ. 2', students: studentsGroupIds[2]},
+            { name: 'Լաբ. 3', students: studentsGroupIds[3]},
+            { name: 'Լաբ. 4', students: studentsGroupIds[4]},
+            { name: 'Դաս.', students: [...studentsGroupIds[1], ...studentsGroupIds[2], ...studentsGroupIds[3], ...studentsGroupIds[4]]},
+            { name: 'Գործ. 1', students: studentsGroupIds[1]},
+            { name: 'Գործ. 2', students: studentsGroupIds[2]},
+            { name: 'ԿԱ 1', students: studentsGroupIds[1]},
+            { name: 'ԿԱ 2', students: studentsGroupIds[2]},
+        ])
+
         // Create groups
         const groups = await Group.create([
             {
                 name: 'օպերացիոն համակարգեր',
                 shortName: 'ՕՀ',
                 lessonSchedule: [
-                    { dayOfWeek: availableWeekDays.monday, timeSlot: availableTimeslots[0], teacher: [teachers[0]._id], room: rooms[1]._id, classType: classTypes[2]._id },
-                    { dayOfWeek: availableWeekDays.monday, timeSlot: availableTimeslots[1], teacher: [teachers[0]._id], room: rooms[2]._id, classType: classTypes[0]._id },
-                    { dayOfWeek: availableWeekDays.monday, timeSlot: availableTimeslots[1], teacher: [teachers[0]._id], room: rooms[1]._id, classType: classTypes[1]._id },
-                    { dayOfWeek: availableWeekDays.monday, timeSlot: availableTimeslots[3], teacher: [teachers[1]._id], room: rooms[2]._id, classType: classTypes[3]._id },
-                    { dayOfWeek: availableWeekDays.wednesday, timeSlot: availableTimeslots[0], teacher: [teachers[1]._id], room: rooms[3]._id, classType: classTypes[4]._id },
+                    { dayOfWeek: availableWeekDays.monday, timeSlot: availableTimeslots[0], teacher: [teachers[0]._id], room: rooms[1]._id, classType: classTypes[0]._id, students: classTypes[0].students, onOddWeek: true, onEvenWeek: true },
+                    { dayOfWeek: availableWeekDays.monday, timeSlot: availableTimeslots[1], teacher: [teachers[0]._id], room: rooms[2]._id, classType: classTypes[0]._id, students: classTypes[0].students, onOddWeek: true, onEvenWeek: true },
+                    { dayOfWeek: availableWeekDays.monday, timeSlot: availableTimeslots[1], teacher: [teachers[0]._id], room: rooms[1]._id, classType: classTypes[1]._id, students: classTypes[1].students, onOddWeek: true, onEvenWeek: true },
+                    { dayOfWeek: availableWeekDays.monday, timeSlot: availableTimeslots[3], teacher: [teachers[1]._id], room: rooms[2]._id, classType: classTypes[3]._id, students: classTypes[3].students, onOddWeek: true, onEvenWeek: true },
+                    { dayOfWeek: availableWeekDays.wednesday, timeSlot: availableTimeslots[0], teacher: [teachers[1]._id], room: rooms[3]._id, classType: classTypes[4]._id, students: classTypes[4].students, onOddWeek: true, onEvenWeek: true },
                 ],
-                students: [students[0]._id, students[1]._id]
             },
             {
                 name: 'քոմփյութերային ցանցերի ծրագրավորում',
                 shortName: 'ՔՑԾ',
                 lessonSchedule: [
-                    { dayOfWeek: availableWeekDays.monday, timeSlot: availableTimeslots[0], teacher: [teachers[9]._id], room: rooms[4]._id, classType: classTypes[1]._id },
-                    { dayOfWeek: availableWeekDays.monday, timeSlot: availableTimeslots[1], teacher: [teachers[9]._id], room: rooms[4]._id, classType: classTypes[3]._id },
-                    { dayOfWeek: availableWeekDays.monday, timeSlot: availableTimeslots[3], teacher: [teachers[9]._id], room: rooms[4]._id, classType: classTypes[0]._id },
-                    { dayOfWeek: availableWeekDays.wednesday, timeSlot: availableTimeslots[1], teacher: [teachers[11]._id], room: rooms[3]._id, classType: classTypes[4]._id },
-                    { dayOfWeek: availableWeekDays.wednesday, timeSlot: availableTimeslots[3], teacher: [teachers[9]._id], room: rooms[4]._id, classType: classTypes[2]._id },
+                    { dayOfWeek: availableWeekDays.monday, timeSlot: availableTimeslots[0], teacher: [teachers[9]._id], room: rooms[4]._id, classType: classTypes[1]._id, students: classTypes[1].students, onOddWeek: true, onEvenWeek: true },
+                    { dayOfWeek: availableWeekDays.monday, timeSlot: availableTimeslots[1], teacher: [teachers[9]._id], room: rooms[4]._id, classType: classTypes[3]._id, students: classTypes[3].students, onOddWeek: true, onEvenWeek: true },
+                    { dayOfWeek: availableWeekDays.monday, timeSlot: availableTimeslots[3], teacher: [teachers[9]._id], room: rooms[4]._id, classType: classTypes[0]._id, students: classTypes[0].students, onOddWeek: true, onEvenWeek: true },
+                    { dayOfWeek: availableWeekDays.wednesday, timeSlot: availableTimeslots[1], teacher: [teachers[11]._id], room: rooms[3]._id, classType: classTypes[4]._id, students: classTypes[4].students, onOddWeek: true, onEvenWeek: true },
+                    { dayOfWeek: availableWeekDays.wednesday, timeSlot: availableTimeslots[3], teacher: [teachers[9]._id], room: rooms[4]._id, classType: classTypes[2]._id, students: classTypes[2].students, onOddWeek: true, onEvenWeek: true },
                 ],
-                students: [students[2]._id, students[3]._id]
             },
             {
                 name: 'օբյեկտ կողմնորոշված ծրագրավորում',
                 shortName: 'ՕԿԾ',
                 lessonSchedule: [
-                    { dayOfWeek: availableWeekDays.thursday, timeSlot: availableTimeslots[0], teacher: [teachers[4]._id], room: rooms[8]._id, classType: classTypes[2]._id },
-                    { dayOfWeek: availableWeekDays.thursday, timeSlot: availableTimeslots[0], teacher: [teachers[4]._id], room: rooms[8]._id, classType: classTypes[0]._id },
-                    { dayOfWeek: availableWeekDays.friday, timeSlot: availableTimeslots[0], teacher: [teachers[4]._id], room: rooms[8]._id, classType: classTypes[4]._id },
-                    { dayOfWeek: availableWeekDays.friday, timeSlot: availableTimeslots[0], teacher: [teachers[4]._id], room: rooms[8]._id, classType: classTypes[1]._id },
-                    { dayOfWeek: availableWeekDays.friday, timeSlot: availableTimeslots[1], teacher: [teachers[4]._id], room: rooms[9]._id, classType: classTypes[4]._id },
+                    { dayOfWeek: availableWeekDays.thursday, timeSlot: availableTimeslots[0], teacher: [teachers[4]._id], room: rooms[8]._id, classType: classTypes[2]._id, students: classTypes[2].students, onOddWeek: true, onEvenWeek: false },
+                    { dayOfWeek: availableWeekDays.thursday, timeSlot: availableTimeslots[0], teacher: [teachers[4]._id], room: rooms[8]._id, classType: classTypes[0]._id, students: classTypes[0].students, onOddWeek: false, onEvenWeek: true },
+                    { dayOfWeek: availableWeekDays.friday, timeSlot: availableTimeslots[0], teacher: [teachers[4]._id], room: rooms[8]._id, classType: classTypes[4]._id, students: classTypes[4].students, onOddWeek: true, onEvenWeek: false },
+                    { dayOfWeek: availableWeekDays.friday, timeSlot: availableTimeslots[0], teacher: [teachers[4]._id], room: rooms[8]._id, classType: classTypes[1]._id, students: classTypes[1].students, onOddWeek: false, onEvenWeek: true },
+                    { dayOfWeek: availableWeekDays.friday, timeSlot: availableTimeslots[1], teacher: [teachers[4]._id], room: rooms[9]._id, classType: classTypes[4]._id, students: classTypes[4].students, onOddWeek: true, onEvenWeek: true },
                 ],
-                students: [students[4]._id, students[5]._id]
             },
             {
                 name: 'ծրագրերի թեստավորում',
                 shortName: 'ԾԹ',
                 lessonSchedule: [
-                    { dayOfWeek: availableWeekDays.monday, timeSlot: availableTimeslots[0], teacher: [teachers[3]._id], room: rooms[3]._id, classType: classTypes[0]._id },
-                    { dayOfWeek: availableWeekDays.monday, timeSlot: availableTimeslots[1], teacher: [teachers[3]._id], room: rooms[3]._id, classType: classTypes[2]._id },
-                    { dayOfWeek: availableWeekDays.monday, timeSlot: availableTimeslots[2], teacher: [teachers[3]._id], room: rooms[4]._id, classType: classTypes[4]._id },
-                    { dayOfWeek: availableWeekDays.monday, timeSlot: availableTimeslots[3], teacher: [teachers[3]._id], room: rooms[3]._id, classType: classTypes[1]._id },
-                    { dayOfWeek: availableWeekDays.wednesday, timeSlot: availableTimeslots[2], teacher: [teachers[3]._id], room: rooms[3]._id, classType: classTypes[2]._id },
-                    { dayOfWeek: availableWeekDays.thursday, timeSlot: availableTimeslots[2], teacher: [teachers[3]._id], room: rooms[3]._id, classType: classTypes[3]._id },
-                    { dayOfWeek: availableWeekDays.thursday, timeSlot: availableTimeslots[2], teacher: [teachers[3]._id], room: rooms[3]._id, classType: classTypes[3]._id },
+                    { dayOfWeek: availableWeekDays.monday, timeSlot: availableTimeslots[0], teacher: [teachers[3]._id], room: rooms[3]._id, classType: classTypes[0]._id, students: classTypes[0].students, onOddWeek: true, onEvenWeek: true },
+                    { dayOfWeek: availableWeekDays.monday, timeSlot: availableTimeslots[1], teacher: [teachers[3]._id], room: rooms[3]._id, classType: classTypes[2]._id, students: classTypes[2].students, onOddWeek: true, onEvenWeek: true },
+                    { dayOfWeek: availableWeekDays.monday, timeSlot: availableTimeslots[2], teacher: [teachers[3]._id], room: rooms[4]._id, classType: classTypes[4]._id, students: classTypes[4].students, onOddWeek: true, onEvenWeek: true },
+                    { dayOfWeek: availableWeekDays.monday, timeSlot: availableTimeslots[3], teacher: [teachers[3]._id], room: rooms[3]._id, classType: classTypes[1]._id, students: classTypes[1].students, onOddWeek: true, onEvenWeek: true },
+                    { dayOfWeek: availableWeekDays.wednesday, timeSlot: availableTimeslots[2], teacher: [teachers[3]._id], room: rooms[3]._id, classType: classTypes[2]._id, students: classTypes[2].students, onOddWeek: true, onEvenWeek: true },
+                    { dayOfWeek: availableWeekDays.thursday, timeSlot: availableTimeslots[2], teacher: [teachers[3]._id], room: rooms[3]._id, classType: classTypes[3]._id, students: classTypes[3].students, onOddWeek: true, onEvenWeek: false },
+                    { dayOfWeek: availableWeekDays.thursday, timeSlot: availableTimeslots[2], teacher: [teachers[3]._id], room: rooms[3]._id, classType: classTypes[3]._id, students: classTypes[3].students, onOddWeek: false, onEvenWeek: true },
                 ],
-                students: [students[6]._id, students[7]._id]
             },
             {
                 name: 'ՔՊ և ԱԻՀ',
                 shortName: 'ՔՊ և ԱԻՀ',
                 lessonSchedule: [
-                    { dayOfWeek: availableWeekDays.tuesday, timeSlot: availableTimeslots[0], teacher: [teachers[12]._id], room: rooms[7]._id, classType: classTypes[4]._id },
-                    { dayOfWeek: availableWeekDays.tuesday, timeSlot: availableTimeslots[0], teacher: [teachers[12]._id], room: rooms[7]._id, classType: classTypes[6]._id },
-                    { dayOfWeek: availableWeekDays.friday, timeSlot: availableTimeslots[3], teacher: [teachers[12]._id], room: rooms[11]._id, classType: classTypes[5]._id },
+                    { dayOfWeek: availableWeekDays.tuesday, timeSlot: availableTimeslots[0], teacher: [teachers[12]._id], room: rooms[7]._id, classType: classTypes[4]._id, students: classTypes[4].students, onOddWeek: true, onEvenWeek: false },
+                    { dayOfWeek: availableWeekDays.tuesday, timeSlot: availableTimeslots[0], teacher: [teachers[12]._id], room: rooms[7]._id, classType: classTypes[6]._id, students: classTypes[6].students, onOddWeek: false, onEvenWeek: true },
+                    { dayOfWeek: availableWeekDays.friday, timeSlot: availableTimeslots[3], teacher: [teachers[12]._id], room: rooms[11]._id, classType: classTypes[5]._id, students: classTypes[5].students, onOddWeek: false, onEvenWeek: true },
                 ],
-                students: [students[8]._id, students[9]._id]
             },
             {
                 name: 'ԾՏ',
                 shortName: 'ԾՏ',
                 lessonSchedule: [
-                    { dayOfWeek: availableWeekDays.tuesday, timeSlot: availableTimeslots[1], teacher: [teachers[6]._id], room: rooms[6]._id, classType: classTypes[8]._id },
-                    { dayOfWeek: availableWeekDays.thursday, timeSlot: availableTimeslots[2], teacher: [teachers[6]._id], room: rooms[6]._id, classType: classTypes[7]._id },
+                    { dayOfWeek: availableWeekDays.tuesday, timeSlot: availableTimeslots[1], teacher: [teachers[6]._id], room: rooms[6]._id, classType: classTypes[8]._id, students: classTypes[8].students, onOddWeek: true, onEvenWeek: true },
+                    { dayOfWeek: availableWeekDays.thursday, timeSlot: availableTimeslots[2], teacher: [teachers[6]._id], room: rooms[6]._id, classType: classTypes[7]._id, students: classTypes[7].students, onOddWeek: true, onEvenWeek: true },
                 ],
-                students: [students[10]._id, students[11]._id]
             },
             {
                 name: 'ճյուղի տնտես',
                 shortName: 'ճյուղի տնտես',
                 lessonSchedule: [
-                    { dayOfWeek: availableWeekDays.friday, timeSlot: availableTimeslots[2], teacher: [teachers[13]._id], room: rooms[10]._id, classType: classTypes[4]._id },
-                    { dayOfWeek: availableWeekDays.friday, timeSlot: availableTimeslots[3], teacher: [teachers[13]._id], room: rooms[10]._id, classType: classTypes[5]._id },
-                    { dayOfWeek: availableWeekDays.friday, timeSlot: availableTimeslots[3], teacher: [teachers[13]._id], room: rooms[10]._id, classType: classTypes[6]._id },
+                    { dayOfWeek: availableWeekDays.friday, timeSlot: availableTimeslots[2], teacher: [teachers[13]._id], room: rooms[10]._id, classType: classTypes[4]._id, students: classTypes[4].students, onOddWeek: true, onEvenWeek: true },
+                    { dayOfWeek: availableWeekDays.friday, timeSlot: availableTimeslots[3], teacher: [teachers[13]._id], room: rooms[10]._id, classType: classTypes[5]._id, students: classTypes[5].students, onOddWeek: true, onEvenWeek: false },
+                    { dayOfWeek: availableWeekDays.friday, timeSlot: availableTimeslots[3], teacher: [teachers[13]._id], room: rooms[10]._id, classType: classTypes[6]._id, students: classTypes[6].students, onOddWeek: false, onEvenWeek: true },
                 ],
-                students: [students[12]._id, students[13]._id]
             },
         ]);
 
-        await createFakeAttendanceListData(groups, students, classTypes);
+        for (const group of groups) {
+            for (const lesson of group.lessonSchedule) {
+                const exactClassType = classTypes.find(classType => {
+                    const cond = lesson.classType === classType._id
+                    if (cond) {
+                        // console.log(cond)
+                    }
+                    return cond
+                });
 
+                for(const student of exactClassType.students) {
+                    const user = await User.findById(student._id);
+
+                    if (user?.lessons?.length) {
+                        user.lessons.push(lesson._id);
+                    } else {
+                        user.lessons = [lesson._id]
+                    }
+
+                    await user.save()
+                }
+            }
+        }
+
+        await createFakeAttendanceListData(groups, students, classTypes);
     } catch (error) {
         console.error('Error generating mock data:', error);
     } finally {
@@ -202,115 +222,43 @@ async function generateMockData() {
 
 const createFakeAttendanceListData = async(groups, students, classTypes) => {
     try {
-        // const uri = 'mongodb://localhost:27017/mydb';
-        // await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
-        const studentsData = {};
-        // studentId: [{
-        // "dayOfWeek": 1,
-        // "timeSlot": "9:30 - 10:50"
-        // }]
         const startDate = moment('2024-01-01', 'YYYY-MM-DD').format('YYYY-MM-DD');
         const endDate = moment();
         const attendanceValues = Object.values(attendanceStatus);
-        // const usersList = await User.find({}).populate('username').populate('role');
-        // const studentsList = usersList.filter(i => i.role.name === ROLES.STUDENT);
 
-        // console.log(groups)
-        // console.log(students)
-        //
-        // groups.map(group => {
-        //     const weekDaysStudentHaveLessons = [];
-        //    group.lessonSchedule.map(lesson => {
-        //
-        //    });
-        // });
-        //
-        students.map(async (student) => {
-            try {
-                const group = groups.find((group) => group.students.includes(student._id));
-                if (!group) {
-                    console.log(`No group found for student ${student._id}`);
-                    return;
-                }
+        for (let m = moment(startDate); m.isBefore(endDate); m.add(1, 'week')) {
+            console.log(m.format('DD-MM-YYYY'))
+            console.log(m.week())
+            for (let group of groups) {
+                for (let lesson of group.lessonSchedule) {
+                    const isOddWeek = m.week() % 2 === 1;
+                    const isEvenWeek = m.week() % 2 === 0;
 
-                const studentLessonSchedule = group.lessonSchedule;
-                if (!studentLessonSchedule || studentLessonSchedule.length === 0) {
-                    console.log(`No lesson schedule found for student ${student._id}`);
-                    return;
-                }
-
-                studentsData[student._id] = studentLessonSchedule.map((i) => {
-                    const classType = classTypes.find((c) => c._id === i.classType);
-                    return {
-                        dayOfWeek: toMomentWeekDays[i.dayOfWeek],
-                        timeSlot: i.timeSlot,
-                        classType: classType?.name,
-                    };
-                });
-            } catch (error) {
-                console.error(`Error processing student ${student._id}:`, error);
-            }
-        });
-
-        for (let m = moment(startDate); m.isBefore(endDate); m.add(1, 'days')) {
-            const weekDay = m.day();
-            if (weekDay === 0 || weekDay === 6) continue;
-
-            for (const id of Object.keys(studentsData)) {
-                try {
-                    const user = await User.findById(id);
-                    if (!user) {
-                        console.log(`User ${id} not found`);
+                    if (isOddWeek && !lesson.onOddWeek) {
                         continue;
                     }
 
-                    const studentLessons = studentsData[id];
-                    const lessonsForDay = studentLessons.filter((lesson) => lesson.dayOfWeek === weekDay);
-
-                    for (const lesson of lessonsForDay) {
-                        const attendanceObj = {
-                            date: m.format('DD-MM-YYYY'),
-                            timeSlot: lesson.timeSlot,
-                            status: attendanceValues[Math.floor(Math.random() * 2)],
-                            classType: lesson?.classType,
-                        };
-
-                        user.attendanceList.push(attendanceObj);
+                    if (isEvenWeek && !lesson.onEvenWeek) {
+                        continue;
                     }
 
-                    await user.save();
-                } catch (error) {
-                    console.error(`Error processing attendance for student ${id}:`, error);
+                    for (let studentId of lesson.students) {
+                        const user = await User.findById(studentId);
+                        //For every week we create fake attendance list data with selected current lesson id and week.
+                        const fakeAttendanceObj = {
+                            week: m.week(),
+                            status: attendanceValues[Math.floor(Math.random() * 2)],
+                            lessonId: lesson._id,
+                            date: moment().day(toMomentWeekDays[lesson.dayOfWeek]).week(m.week()).format('DD-MM-YYYY'),
+                            timeSlot: lesson.timeSlot,
+                        };
+
+                        user.attendanceList.push(fakeAttendanceObj);
+                        await user.save();
+                    }
                 }
             }
         }
-
-
-        // for (let m = moment(startDate); m.isBefore(endDate); m.add(1, 'days')) {
-        //     const weekDay = m.day();
-        //     if (weekDay === 0 || weekDay === 6 ) continue;
-        //
-        //     for (const id of Object.keys(studentsData)) {
-        //         const user = await User.findById(id);
-        //         const studentLessons = studentsData[id];
-        //
-        //         const lessonsForDay = studentLessons.filter(lesson => lesson.dayOfWeek === weekDay);
-        //
-        //         for (const lesson of lessonsForDay) {
-        //             const attendanceObj = {
-        //                 date: m.format('DD-MM-YYYY'),
-        //                 timeSlot: lesson.timeSlot,
-        //                 status: attendanceValues[Math.floor(Math.random() * 2)],
-        //                 classType: lesson?.classType
-        //             };
-        //
-        //             user.attendanceList.push(attendanceObj);
-        //         }
-        //
-        //         await user.save();
-        //     }
-        // }
 
         console.log('Mock data generated successfully');
     } catch (err) {
@@ -318,4 +266,4 @@ const createFakeAttendanceListData = async(groups, students, classTypes) => {
     }
 }
 
-generateMockData();
+module.exports = generateMockData;

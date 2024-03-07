@@ -1,8 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require('cors');
-// require('./fack');
-// require('./fackClass');
+// require('./fake');
 app.use(express.json());
 app.use(cors())
 

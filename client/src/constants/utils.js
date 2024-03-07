@@ -16,6 +16,14 @@ const toMomentWeekDays = {
 	[availableWeekDays.friday]: 5,
 }
 
+const toHumanWeekDay = {
+	1: availableWeekDays.monday,
+	2: availableWeekDays.tuesday,
+	3: availableWeekDays.wednesday,
+	4: availableWeekDays.wednesday,
+	5: availableWeekDays.friday
+}
+
 const attendanceStatus = {
 	inTime: 'InTime',
 	late: 'Late',
@@ -28,4 +36,4 @@ const attendanceStatusTranslate = {
 	[attendanceStatus.acceptable]: 'Հարգելի'
 };
 
-module.exports = {availableTimeslots, availableWeekDays, toMomentWeekDays, attendanceStatusTranslate, attendanceStatus};
+module.exports = {availableTimeslots, availableWeekDays, toMomentWeekDays, attendanceStatusTranslate, attendanceStatus, toHumanWeekDay};

@@ -3,7 +3,7 @@ import * as auth from "../../helpers/auth";
 import {SERVER_HOST_IP} from "../../constants/config";
 import React from 'react';
 import { Button, Calendar, Select, Form } from 'antd';
-import { attendanceStatus, attendanceStatusTranslate, toMomentWeekDays } from "../../constants/utils";
+import {attendanceStatus, attendanceStatusTranslate, toHumanWeekDay, toMomentWeekDays} from "../../constants/utils";
 import './index.css';
 import StatusChangeModal from "./StatusChangeModal";
 import {getRoles} from "../../helpers/auth";
@@ -45,9 +45,9 @@ const AttendanceTable = () => {
 		if (isStudentRole || (!isStudentRole && !!selectedStudent)) {
 			const token = auth.getToken();
 			fetch(`${SERVER_HOST_IP}/attendance?studentId=${selectedStudent}`, {headers: {Authorization: token}}).then(res => res.json()).then(val => {
-				val['lessonSchedule'].map(i => i.weekday = toMomentWeekDays[i.dayOfWeek])
+				// val['lessonSchedule'].map(i => i.weekday = toMomentWeekDays[i.dayOfWeek])
 				setDataList(val)
-				calcWeekScore(val)
+				// calcWeekScore(val)
 			}).finally(() => {
 				setIsLoading(false)
 			})
@@ -76,29 +76,73 @@ const AttendanceTable = () => {
 	}, [])
 
 	const dateCellRender = (value) => {
-		const weekday = value.weekday();
+		const weekday = value.weekday() + 1;
+		const weekdayName = toHumanWeekDay[weekday];
 		let currentDay = value.date();
 		let currentMonth = calendarDate.month() + 1; // +1 as the jan is 0
+		const currentMonthIsOdd = currentMonth % 2 === 1;
+		const currentMonthIsEven = currentMonth % 2 === 0;
 
-		const currentLessonSchedule = dataList['lessonSchedule'].filter(i => i.weekday === weekday);
-		if (!currentLessonSchedule.length) return null;
+		const exactLessonsForCurrentUser = [];
+		console.log(`${currentDay}-${currentMonth}-2024`)
+		console.log(weekdayName)
+		dataList.groups.map(group => {
+			group.lessonSchedule.map(lesson => {
+				if (lesson.students.includes(selectedStudent) && lesson.dayOfWeek === weekdayName) {
+					exactLessonsForCurrentUser.push(lesson)
+				}
+			})
+		})
 
-		if (currentDay < 10) {
-			currentDay = `0${currentDay}`
-		}
+		// console.log(exactLessonsForCurrentUser)
 
-		if (currentMonth < 10) {
-			currentMonth = `0${currentMonth}`
-		}
+		// const exactStudentLessonSchedule = [];
 
-		const attendanceList = dataList['attendanceList'].filter(i => i.date === `${currentDay}-${currentMonth}-2024`);
+		// for (let group of dataList.groups) {
+		// 	const filteredByWeekDayAndStudentId = group.lessonSchedule.filter((i => {
+		// 		const condition = (toMomentWeekDays[i.dayOfWeek] === weekday + 1) && i.students.includes(selectedStudent);
+		//
+		// 		if (currentMathIsOdd && !i.onOddWeek) {
+		// 			return false
+		// 		}
+		//
+		// 		if (currentMathIsEven && !i.onEvenWeek) {
+		// 			return false
+		// 		}
+		//
+		// 		return condition
+		// 	}))
+		// 	exactStudentLessonSchedule.push(...filteredByWeekDayAndStudentId);
+		// }
 
-		if (!attendanceList.length) return null;
+		// if (currentDay < 10) {
+		// 	currentDay = `0${currentDay}`
+		// }
+		//
+		// if (currentMonth < 10) {
+		// 	currentMonth = `0${currentMonth}`
+		// }
+
+		// const attendanceList = dataList['attendanceList'].filter(i => i.date === `${currentDay}-${currentMonth}-2024`);
+		//
+		// if (!attendanceList.length) return null;
+		//
+		// console.log(attendanceList, 'attendanceList');
+		// console.log(currentLessonSchedule, 'currentLessonSchedule')
+		// console.log(exactStudentLessonSchedule)
+
+		if(!exactLessonsForCurrentUser.length) return null;
 
 		return (
 			<ul className="events">
-				{currentLessonSchedule.map((i, index) => {
-					const status = attendanceList.find(a => a.timeSlot === i.timeSlot && a.classType === i.classType?.name)?.status;
+				{exactLessonsForCurrentUser.map((i, index) => {
+					//Find exact attendanceList item with week and lesson id. It should be only one item in a week with the same lesson id.
+					const exactAttendanceItem = dataList.attendanceList.find(l => l.week === weekday && i._id === l.lessonId);
+
+					const status = exactAttendanceItem?.status;
+
+					console.log(exactAttendanceItem, 'exactAttendanceItem')
+					console.log(i, 'exactLessonsForCurrentUserItem - item - i')
 
 					return (
 						<p style={{fontSize: 8}} key={index}>
@@ -117,6 +161,7 @@ const AttendanceTable = () => {
 							>
 								{attendanceStatusTranslate[status] || 'Բացակա'}
 							</span>
+							{/*<span> Շաբաթ: {forAllWeeks ? 'բոլոր' : isOdd ? '1' : '2'}</span>*/}
 						</p>
 					)
 				})}

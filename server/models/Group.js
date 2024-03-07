@@ -27,12 +27,18 @@ const groupSchema = new mongoose.Schema({
         classType: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'ClassType'
-        }
+        },
+        students: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }],
+        onOddWeek: Boolean,
+        onEvenWeek: Boolean
     }],
-    students: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    }],
+    // students: [{
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'User'
+    // }],
     time: {
         type: String,
     }

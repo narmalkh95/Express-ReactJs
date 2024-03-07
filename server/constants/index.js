@@ -16,6 +16,14 @@ const toMomentWeekDays = {
 	[availableWeekDays.friday]: 5,
 }
 
+const momentWeekDayToHumanFriendly = {
+	1: availableWeekDays.monday,
+	2: availableWeekDays.tuesday,
+	3: availableWeekDays.wednesday,
+	4: availableWeekDays.thursday,
+	5: availableWeekDays.friday
+}
+
 const dateOffNumbers = {
 	1 : 'Երկուշաբթի',
 	2 : 'Երեքշաբթի',

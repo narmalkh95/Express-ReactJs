@@ -4,6 +4,7 @@ const User = require('./models/User');
  const Teacher = require("./models/Teacher");
 const Student = require("./models/Student");
 const Role = require("./models/Role");
+const generateMockData = require('./fakeClass');
 
 const uri = 'mongodb://localhost:27017/mydb';
 
@@ -45,6 +46,8 @@ async function createFakeUser() {
             User.create(fakeTeacherWithRole),
             User.create(fakeStudentWithRole)
         ]);
+
+        await generateMockData();
 
         console.log(`Fake user inserted with _id: ${user._id}`);
     } catch (error) {

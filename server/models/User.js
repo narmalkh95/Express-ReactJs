@@ -15,9 +15,11 @@ const userSchema = new mongoose.Schema({
     attendanceList: [{
         date: String,
         timeSlot: String,
+        week: Number,
         status: String,
-        classType: String
-    }]
+        lessonId: mongoose.Schema.Types.ObjectId
+    }],
+    lessons: [mongoose.Schema.Types.ObjectId]
 });
 
 const ROLES = {

@@ -23,7 +23,7 @@ router.get('/',
 				role: student.role.name,
 				username: student?.username,
 				id: student.id,
-				attendanceList: student.attendanceList
+				attendanceList: student.attendanceList.sort((a, b) => a.date - b.date)
 			}
 		})
 
