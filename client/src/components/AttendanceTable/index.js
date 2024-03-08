@@ -9,6 +9,7 @@ import StatusChangeModal from "./StatusChangeModal";
 import {getRoles} from "../../helpers/auth";
 import UserRoles from "../../constants/userRoles";
 import dayjs from "dayjs";
+import moment from "moment";
 
 const weeksToBeCalculated = {
 	16: {
@@ -39,7 +40,7 @@ const AttendanceTable = () => {
 		fetch(`${SERVER_HOST_IP}/students`, {headers: {Authorization: token}}).then(res => res.json()).then(val => {
 			setStudents(val)
 		})
-	}, []);
+	}, [toggleFetch]);
 
 	useEffect(() => {
 		if (isStudentRole || (!isStudentRole && !!selectedStudent)) {
@@ -76,7 +77,7 @@ const AttendanceTable = () => {
 	}, [])
 
 	const dateCellRender = (value) => {
-		const weekday = value.weekday() + 1;
+		const weekday = value.weekday();
 		const weekdayName = toHumanWeekDay[weekday];
 		let currentDay = value.date();
 		let currentMonth = calendarDate.month() + 1; // +1 as the jan is 0
@@ -84,69 +85,44 @@ const AttendanceTable = () => {
 		const currentMonthIsEven = currentMonth % 2 === 0;
 
 		const exactLessonsForCurrentUser = [];
-		console.log(`${currentDay}-${currentMonth}-2024`)
-		console.log(weekdayName)
 		dataList.groups.map(group => {
 			group.lessonSchedule.map(lesson => {
 				if (lesson.students.includes(selectedStudent) && lesson.dayOfWeek === weekdayName) {
+					lesson.groupName = group.shortName
 					exactLessonsForCurrentUser.push(lesson)
 				}
 			})
 		})
 
-		// console.log(exactLessonsForCurrentUser)
+		if (currentDay < 10) {
+			currentDay = `0${currentDay}`
+		}
 
-		// const exactStudentLessonSchedule = [];
-
-		// for (let group of dataList.groups) {
-		// 	const filteredByWeekDayAndStudentId = group.lessonSchedule.filter((i => {
-		// 		const condition = (toMomentWeekDays[i.dayOfWeek] === weekday + 1) && i.students.includes(selectedStudent);
-		//
-		// 		if (currentMathIsOdd && !i.onOddWeek) {
-		// 			return false
-		// 		}
-		//
-		// 		if (currentMathIsEven && !i.onEvenWeek) {
-		// 			return false
-		// 		}
-		//
-		// 		return condition
-		// 	}))
-		// 	exactStudentLessonSchedule.push(...filteredByWeekDayAndStudentId);
-		// }
-
-		// if (currentDay < 10) {
-		// 	currentDay = `0${currentDay}`
-		// }
-		//
-		// if (currentMonth < 10) {
-		// 	currentMonth = `0${currentMonth}`
-		// }
-
-		// const attendanceList = dataList['attendanceList'].filter(i => i.date === `${currentDay}-${currentMonth}-2024`);
-		//
-		// if (!attendanceList.length) return null;
-		//
-		// console.log(attendanceList, 'attendanceList');
-		// console.log(currentLessonSchedule, 'currentLessonSchedule')
-		// console.log(exactStudentLessonSchedule)
+		if (currentMonth < 10) {
+			currentMonth = `0${currentMonth}`
+		}
 
 		if(!exactLessonsForCurrentUser.length) return null;
+
+		if(moment().isBefore(`2024-${currentMonth}-${currentDay}`, 'day')) {
+			return null
+		}
 
 		return (
 			<ul className="events">
 				{exactLessonsForCurrentUser.map((i, index) => {
 					//Find exact attendanceList item with week and lesson id. It should be only one item in a week with the same lesson id.
-					const exactAttendanceItem = dataList.attendanceList.find(l => l.week === weekday && i._id === l.lessonId);
-
+					const exactAttendanceItem = dataList.attendanceList.find(l => l.date === `${currentDay}-${currentMonth}-2024` && i._id === l.lessonId);
 					const status = exactAttendanceItem?.status;
 
-					console.log(exactAttendanceItem, 'exactAttendanceItem')
-					console.log(i, 'exactLessonsForCurrentUserItem - item - i')
+					// if(!exactAttendanceItem) {
+					// 	return null
+					// }
+					// 	debugger
 
 					return (
 						<p style={{fontSize: 8}} key={index}>
-							{/*<span style={{textTransform: 'capitalize'}}>{dataList.group.name + ' '}</span>*/}
+							<span style={{textTransform: 'capitalize', fontWeight: "bold"}}>{i.groupName + ' '}</span>
 							<span>{i.timeSlot + ' '}</span>
 							<span style={{color: "gray"}}>{i.classType.name + ' '}</span>
 							<span style={{color: 'red'}}>{i.teacher.username + ' '}</span>
@@ -189,7 +165,7 @@ const AttendanceTable = () => {
 				name={'student'}
 				label={'Ուսանող'}
 				rules={[{required: true, message: 'Պարտադիտ դաշտ:'}]}
-				style={{minWidth: 350, marginLeft: 20, marginBottom: 0}}
+				style={{minWidth: 350, marginBottom: 0}}
 			>
 				<Select
 					options={studentOptions}
@@ -207,13 +183,12 @@ const AttendanceTable = () => {
 			<h4>Հաճախումներ</h4>
 
 			<div className={'attendance-header'}>
-				{!isStudentRole && (
-					<Button type="primary" onClick={() => setIsStatusChangeModalOpen(true)}>
+				{!isStudentRole && studentSelect}
+				{!isStudentRole && selectedStudent && (
+					<Button type="primary" onClick={() => setIsStatusChangeModalOpen(true)} style={{marginLeft: 20}}>
 						Փոխել կարգավիճակը
 					</Button>
 				)}
-
-				{!isStudentRole && studentSelect}
 
 				{scoreObj !== null && (
 					<div style={{marginLeft: 20}}>
@@ -231,6 +206,8 @@ const AttendanceTable = () => {
 				onCancel={() => setIsStatusChangeModalOpen(false)}
 				onSuccess={() => setToggleFetch(prev => !prev)}
 				students={students}
+				dataList={dataList}
+				selectedStudent={selectedStudent}
 			/>
 		</div>
 	)

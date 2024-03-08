@@ -35,10 +35,13 @@ router.post('/',
 	// (req, res, next) => hasRole(req, res, next, [ROLES.ADMIN, ROLES.TEACHER]),
 	async (req, res) => {
 		try {
-			const {selectedStatus, selectedTimeSlotId, selectedDate, selectedStudentId} = req.body;
+			const {selectedStatus, selectedLessonId, selectedDate, selectedStudentId} = req.body;
 
 			const student = await User.findById(selectedStudentId);
-			const index = student.attendanceList.findIndex(i => i.id === selectedTimeSlotId)
+			const index = student.attendanceList.findIndex(i => {
+				const stringifiedId = i._id.toString()
+				return  stringifiedId === selectedLessonId && i.date === selectedDate
+			})
 
 			student.attendanceList[index].status = selectedStatus;
 			student.save()

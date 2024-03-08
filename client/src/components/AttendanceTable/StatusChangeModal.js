@@ -5,34 +5,37 @@ import * as auth from "../../helpers/auth";
 import moment from "moment";
 import {attendanceStatus, attendanceStatusTranslate} from "../../constants/utils";
 
-const StatusChangeModal = ({isOpen, onCancel, onSuccess, students}) => {
-	const [selectedStudentId, setSelectedStudentId] = useState('');
+const StatusChangeModal = ({isOpen, onCancel, onSuccess, students, dataList, selectedStudent}) => {
 	const [selectedDate, setSelectedDate] = useState('');
-	const [selectedTimeSlotId, setSelectedTimeSlotId] = useState('');
+	const [selectedLessonId, setSelectedLessonId] = useState('');
 	const [selectedStatus, setSelectedStatus] = useState('');
 
-	useEffect(() => {
-		if (selectedStudentId && selectedDate) {
-
-		}
-	}, [selectedStudentId, selectedDate])
-
 	const studentAttendanceSelectOptions = useMemo(() => {
-		if (selectedStudentId && selectedDate) {
-			const student = students.find(s => s.id === selectedStudentId);
+		if (selectedDate) {
+			const student = students.find(s => s.id === selectedStudent);
 			const filteredAttendanceList = student?.attendanceList?.filter(i => i.date === selectedDate);
 
+			filteredAttendanceList.forEach((i, index) => {
+				dataList.groups.forEach(group => {
+					const item = group.lessonSchedule.find(l => l._id === i.lessonId);
+					if (item) {
+						filteredAttendanceList[index].groupName = item.groupName;
+						filteredAttendanceList[index].classType = item.classType.name;
+					}
+				})
+			})
+
 			return filteredAttendanceList.map(a => {
-				return {value: a['_id'], label: a['timeSlot'] + ' ' + a.classType || ''}
+				return {value: a['_id'], label: `${a.groupName} - ${a.classType} - ${a.timeSlot} - ${attendanceStatusTranslate[a.status] || 'Բացակա'}` }
 			})
 		}
 
 		return []
-	}, [selectedStudentId, selectedDate]);
+	}, [selectedDate, students]);
 
 	const onFinish = () => {
 		try {
-			const obj = {selectedStatus, selectedTimeSlotId, selectedDate, selectedStudentId}
+			const obj = {selectedStatus, selectedLessonId, selectedDate, selectedStudentId: selectedStudent}
 			const token = auth.getToken();
 
 			fetch(`${SERVER_HOST_IP}/students`, {
@@ -52,32 +55,35 @@ const StatusChangeModal = ({isOpen, onCancel, onSuccess, students}) => {
 		}
 	};
 
-	const studentOptions = useMemo(() => {
-		return students.map(s => {
-			return {value: s.id, label: s.username, key: s.id}
-		})
-	}, [students])
+	// const studentOptions = useMemo(() => {
+	// 	return students.map(s => {
+	// 		return {value: s.id, label: s.username, key: s.id}
+	// 	})
+	// }, [students])
 
 	return (<Modal title="Փոխել կարգավիճակը" open={isOpen} onCancel={onCancel} footer={null} destroyOnClose={true}>
-			<Form.Item key={'student'} name={'student'} label={'Ուսանող'}
-			           rules={[{required: true, message: 'Պարտադիտ դաշտ:'}]}>
-				<Select
-					options={studentOptions}
-					onSelect={(e) => {
-						setSelectedStudentId(e)
-						setSelectedStatus('')
-						setSelectedTimeSlotId('')
-					}}
-				>
-				</Select>
-			</Form.Item>
+			{/*<Form.Item key={'student'} name={'student'} label={'Ուսանող'}*/}
+			{/*           rules={[{required: true, message: 'Պարտադիտ դաշտ:'}]}>*/}
+			{/*	<Select*/}
+			{/*		options={studentOptions}*/}
+			{/*		onSelect={(e) => {*/}
+			{/*			setSelectedStudentId(e)*/}
+			{/*			setSelectedStatus('')*/}
+			{/*			setSelectedLessonId('')*/}
+			{/*		}}*/}
+			{/*		onClear={() => {*/}
+			{/*			setSelectedDate('')*/}
+			{/*		}}*/}
+			{/*	>*/}
+			{/*	</Select>*/}
+			{/*</Form.Item>*/}
 
 			<Form.Item key={'date'} name={'date'} label={'Ժամանակ'}
 			           rules={[{required: true, message: 'Պարտադիտ դաշտ:'}]}>
 				<DatePicker onChange={(date, dateString) => {
 					setSelectedDate(moment(dateString, 'YYYY-MM-DD').format('DD-MM-YYYY'))
 					setSelectedStatus('')
-					setSelectedTimeSlotId('')
+					setSelectedLessonId('')
 				}}/>
 			</Form.Item>
 
@@ -86,7 +92,7 @@ const StatusChangeModal = ({isOpen, onCancel, onSuccess, students}) => {
 					           rules={[{required: true, message: 'Պարտադիտ դաշտ:'}]}>
 						<Select
 							options={studentAttendanceSelectOptions}
-							onSelect={(e) => setSelectedTimeSlotId(e)}
+							onSelect={(e) => setSelectedLessonId(e)}
 						>
 						</Select>
 					</Form.Item>
@@ -117,7 +123,7 @@ const StatusChangeModal = ({isOpen, onCancel, onSuccess, students}) => {
 					<Button
 						type="primary"
 						htmlType="submit"
-						disabled={!selectedStudentId || !selectedDate || !selectedTimeSlotId || !selectedStatus}
+						disabled={!selectedDate || !selectedLessonId || !selectedStatus}
 						onClick={onFinish}
 					>
 						Submit
