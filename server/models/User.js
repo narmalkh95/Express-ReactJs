@@ -17,7 +17,8 @@ const userSchema = new mongoose.Schema({
         timeSlot: String,
         week: Number,
         status: String,
-        lessonId: mongoose.Schema.Types.ObjectId
+        lessonId: mongoose.Schema.Types.ObjectId,
+        groupName: String
     }],
     lessons: [mongoose.Schema.Types.ObjectId]
 });

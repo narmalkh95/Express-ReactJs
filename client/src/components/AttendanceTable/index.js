@@ -12,16 +12,38 @@ import dayjs from "dayjs";
 import moment from "moment";
 
 const weeksToBeCalculated = {
-	16: {
-		1: 9,
-		2: 8,
-		3: 7,
-		4: 6,
-		5: 4,
-		6: 3,
-		7: 2
+	32: {
+		1: 10,
+		2: 9,
+		3: 9,
+		4: 8,
+		5: 7,
+		6: 7,
+		7: 6,
+		8: 5,
+		9: 5,
+		10: 4,
+		11: 4,
+		12: 3,
+		13: 2,
+		14: 2,
+		15: 1
+	},
+	64: {
+		'0-3': 10,
+		'4-6': 9,
+		'7-10': 8,
+		'11-12': 7,
+		'13-15': 6,
+		'16-19': 5,
+		'20-22': 4,
+		'23-25': 3,
+		'26-28': 2,
+		'29-32': 1,
 	}
-}
+};
+
+const presentStatusList = [attendanceStatus.inTime, attendanceStatus.acceptable];
 
 const AttendanceTable = () => {
 	const [dataList, setDataList] = useState([]);
@@ -46,32 +68,69 @@ const AttendanceTable = () => {
 		if (isStudentRole || (!isStudentRole && !!selectedStudent)) {
 			const token = auth.getToken();
 			fetch(`${SERVER_HOST_IP}/attendance?studentId=${selectedStudent}`, {headers: {Authorization: token}}).then(res => res.json()).then(val => {
-				// val['lessonSchedule'].map(i => i.weekday = toMomentWeekDays[i.dayOfWeek])
 				setDataList(val)
-				// calcWeekScore(val)
+				calcWeekScore(val, selectedStudent)
 			}).finally(() => {
 				setIsLoading(false)
 			})
 		}
 	}, [toggleFetch, selectedStudent]);
 
-	const calcWeekScore = useCallback((data) => {
-		let weekNumber = 16;
-		let weekCountObject = weeksToBeCalculated[weekNumber];
+	const calcWeekScore = useCallback((data, selectedStudent) => {
+		const {attendanceList, groups, userLessonIds} = data;
+		const weeklyLessonScheduleByGroupName = {};
+		const calcWith32 = ['ՕԿԾ', 'ՔՊ և ԱԻՀ', 'ճյուղի տնտես'];
 
-		const attendanceList = data['attendanceList'];
-		const lessonSchedule = data['lessonSchedule'];
+		for(let group of groups) {
+			weeklyLessonScheduleByGroupName[group.shortName] = group.lessonSchedule.filter(lesson => lesson.students.includes(selectedStudent));
+		}
 
-		const numberOfLessonsInWeek = lessonSchedule.length;
-		const numberShouldBePresent = numberOfLessonsInWeek * weekNumber;
-		const numberOfBeingPresent = attendanceList.length;
-		const absentCount = numberShouldBePresent - numberOfBeingPresent;
-		const scoreCount = weekCountObject[absentCount] || 0;
+		const groupedCountShouldBePresent = {};
+
+		Object.keys(weeklyLessonScheduleByGroupName).forEach(groupName => {
+			groupedCountShouldBePresent[groupName] = {
+				shouldBePresentCount: 0,
+				actualPresentsCount: 0
+			}
+		});
+
+		attendanceList.forEach(attendance => {
+			groupedCountShouldBePresent[attendance.groupName].shouldBePresentCount++;
+			if(presentStatusList.includes(attendance.status)) {
+				groupedCountShouldBePresent[attendance.groupName].actualPresentsCount++;
+			}
+		})
+
+
+		Object.keys(groupedCountShouldBePresent).forEach(group => {
+			const absentCount = groupedCountShouldBePresent[group].shouldBePresentCount - groupedCountShouldBePresent[group].actualPresentsCount;
+			const doubledAbsentCount = absentCount * 2;
+			groupedCountShouldBePresent[group].absentCount = absentCount;
+			groupedCountShouldBePresent[group].doubledAbsentCount = doubledAbsentCount;
+
+			if (calcWith32.includes(group)) {
+				groupedCountShouldBePresent[group].score = weeksToBeCalculated[32][doubledAbsentCount] || 0;
+			} else {
+				//Calculate with 64
+				Object.keys(weeksToBeCalculated[64]).forEach(key => {
+					const [startDay, endDay] = key.split('-');
+
+					if(doubledAbsentCount >= startDay && doubledAbsentCount <= endDay) {
+						groupedCountShouldBePresent[group].score = weeksToBeCalculated[64][key];
+					}
+				})
+
+				if (!groupedCountShouldBePresent[group].score) {
+					groupedCountShouldBePresent[group].score = 0
+				}
+			}
+		})
+
+		const lengthOfLessonGroups = Object.keys(weeklyLessonScheduleByGroupName).length;
 
 		setScoreObj({
-			count: scoreCount,
-			week: weekNumber,
-			absent: absentCount
+			count: Math.floor(Object.values(groupedCountShouldBePresent).reduce((prev, current) => prev + current.score, 0) / lengthOfLessonGroups),
+			absent: Object.values(groupedCountShouldBePresent).reduce((prev, current) => prev + current.absentCount, 0)
 		});
 	}, [])
 
@@ -200,7 +259,7 @@ const AttendanceTable = () => {
 
 				{scoreObj !== null && (
 					<div style={{marginLeft: 20}}>
-						<p>Հաշվարկն ըստ {scoreObj.week} շաբաթի</p>
+						{/*<p>Հաշվարկն ըստ {scoreObj.week} շաբաթի</p>*/}
 						<p>Գնահատական - {scoreObj.count}</p>
 						<p>Բացակաների հանրագումար - {scoreObj.absent}</p>
 					</div>

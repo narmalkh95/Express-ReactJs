@@ -250,6 +250,7 @@ const createFakeAttendanceListData = async(groups, students, classTypes) => {
                             lessonId: lesson._id,
                             date: moment().day(toMomentWeekDays[lesson.dayOfWeek]).week(m.week()).format('DD-MM-YYYY'),
                             timeSlot: lesson.timeSlot,
+                            groupName: group.shortName
                         };
 
                         user.attendanceList.push(fakeAttendanceObj);
