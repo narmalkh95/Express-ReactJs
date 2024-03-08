@@ -64,6 +64,8 @@ const ClassTable = () => {
     }, []);
 
     const renderTableItem = useCallback((i, index) => {
+        const weekSeparator = i.onEvenWeek && i.onOddWeek ? '' : i.onOddWeek ? 'I' : 'II'
+
         return (
             <Popconfirm
                 title="Հեռացնել դասաժամը"
@@ -77,6 +79,14 @@ const ClassTable = () => {
                     <span style={{color: "gray"}}>{i.classType + ' '}</span>
                     <span style={{color: 'red'}}>{i.teacher + ' '}</span>
                     <span style={{color: 'purple'}}>{i.room}</span>
+                    {weekSeparator && (
+                        <span style={{
+                            fontWeight: 'bold',
+                            fontSize: 12,
+                            fontFamily: 'monospace'
+                        }}
+                        > - {weekSeparator}</span>
+                    )}
                 </p>
             </Popconfirm>
         )

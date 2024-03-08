@@ -56,7 +56,6 @@ const AttendanceTable = () => {
 	}, [toggleFetch, selectedStudent]);
 
 	const calcWeekScore = useCallback((data) => {
-
 		let weekNumber = 16;
 		let weekCountObject = weeksToBeCalculated[weekNumber];
 
@@ -81,12 +80,18 @@ const AttendanceTable = () => {
 		const weekdayName = toHumanWeekDay[weekday];
 		let currentDay = value.date();
 		let currentMonth = calendarDate.month() + 1; // +1 as the jan is 0
-		const currentMonthIsOdd = currentMonth % 2 === 1;
-		const currentMonthIsEven = currentMonth % 2 === 0;
+		const isOddWeek = weekday % 2 === 1;
+		const isEvenWeek = weekday % 2 === 0;
 
 		const exactLessonsForCurrentUser = [];
 		dataList.groups.map(group => {
 			group.lessonSchedule.map(lesson => {
+				// if (!lesson.onOddWeek && isOddWeek) return;
+				// if (!lesson.onEvenWeek && isEvenWeek) return;
+				//
+				// if (`${currentDay}-${currentMonth}-2024` === '9-1-2024') {
+				// 	// debugger
+				// }
 				if (lesson.students.includes(selectedStudent) && lesson.dayOfWeek === weekdayName) {
 					lesson.groupName = group.shortName
 					exactLessonsForCurrentUser.push(lesson)
@@ -115,10 +120,13 @@ const AttendanceTable = () => {
 					const exactAttendanceItem = dataList.attendanceList.find(l => l.date === `${currentDay}-${currentMonth}-2024` && i._id === l.lessonId);
 					const status = exactAttendanceItem?.status;
 
-					// if(!exactAttendanceItem) {
-					// 	return null
-					// }
+					// if (`${currentDay}-${currentMonth}-2024` === '09-01-2024') {
 					// 	debugger
+					// }
+					// if (!i.onOddWeek && weekday % 2 === 1) return null;
+                    // if (!i.onEvenWeek && weekday % 2 === 0) return null;
+
+					if(!exactAttendanceItem) return null;
 
 					return (
 						<p style={{fontSize: 8}} key={index}>

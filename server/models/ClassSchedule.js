@@ -29,7 +29,9 @@ async function getClassSchedule() {
                     teacher: teacher.username,
                     classType: classType.name,
                     lessonScheduleId: _id,
-                    groupId: group._id
+                    groupId: group._id,
+                    onOddWeek: lesson.onOddWeek,
+                    onEvenWeek: lesson.onEvenWeek
                     // timeSlot,
                     // students: studentNames,
                 };
