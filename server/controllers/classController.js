@@ -14,8 +14,10 @@ const {availableTimeslots, availableWeekDays} = require("../constants");
 
 // Create class
 router.post('/class', async(req, res) => {
-    const { group, teacher, room, classType, timeSlot, dayOfWeek } = req.body;
-	const objToInsert = {dayOfWeek: dayOfWeek, room, classType, teacher, timeSlot};
+    const { group, teacher, room, classType, timeSlot, dayOfWeek, onEvenWeek, onOddWeek } = req.body;
+
+	const classTypeById = await ClassType.findById(classType);
+	const objToInsert = {dayOfWeek: dayOfWeek, room, classType, teacher, timeSlot, students: classTypeById.students, onOddWeek, onEvenWeek };
 
 	try {
 		await Group.findByIdAndUpdate(group, {

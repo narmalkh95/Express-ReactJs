@@ -26,7 +26,11 @@ const CreateNewLesson = ({isOpen, onCancel, getLessons}) => {
 
 	const onFinish = async(values) => {
 		try {
-			await createLesson(values);
+			await createLesson({
+				...values,
+				onEvenWeek: values.onWhichWeek === 2 || values.onWhichWeek === 0,
+				onOddWeek: values.onWhichWeek === 1 || values.onWhichWeek === 0,
+			});
 			await getLessons();
 			onCancel();
 		} catch (error) {
@@ -67,6 +71,17 @@ const CreateNewLesson = ({isOpen, onCancel, getLessons}) => {
 							</Form.Item>
 						)
 					})}
+
+					<Form.Item name={'onWhichWeek'} label={'Շաբաթ'} rules={[{ required: true, message: 'Պարտադիտ դաշտ:' }]}>
+						<Select
+							options={[
+								{value: 0, label: 'Բոլոր'},
+								{value: 1, label: 'I'},
+								{value: 2, label: 'II'}
+							]}
+						>
+						</Select>
+					</Form.Item>
 
 					<div style={{display: 'flex', width: '100%', justifyContent: 'center'}}>
 						<Form.Item
