@@ -92,7 +92,7 @@ const CreateNewLesson = ({isOpen, onCancel, getLessons}) => {
 							style={{marginRight: 10}}
 						>
 							<Button type="primary" htmlType="submit">
-								Submit
+								Ներկայացնել
 							</Button>
 						</Form.Item>
 
@@ -104,15 +104,15 @@ const CreateNewLesson = ({isOpen, onCancel, getLessons}) => {
 							style={{marginLeft: 10}}
 						>
 							<Button type="default" onClick={onCancel}>
-								Cancel
+								Չեղարկել
 							</Button>
 						</Form.Item>
 					</div>
 				</Form>
 			)}
 
-			{isLoading && <p>Loading...</p>}
-			{error && <p>Error: {error.message}</p>}
+			{isLoading && <p>Բեռնվում է...</p>}
+			{error && <p>Սխալ: {error.message}</p>}
 		</Modal>
 	)
 }

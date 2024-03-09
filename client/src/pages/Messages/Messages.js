@@ -40,25 +40,25 @@ const Messages = () => {
 
     const columns = [
         {
-            title: 'User',
+            title: 'Ուսանող',
             dataIndex: ['user', 'username'],
             key: 'username',
             render: (username, record) => `${username} (${record.user.email})`
         },
         {
-            title: 'Text Data',
+            title: 'Հաղորդագրություն',
             dataIndex: ['file', 'textData'],
             key: 'textData',
         },
         {
-            title: 'Created At',
+            title: 'Ամսաթիվ',
             dataIndex: ['file', 'createdAt'],
             key: 'createdAt',
             render: date => new Date(date).toLocaleString()
         },
 
         {
-            title: 'File URL',
+            title: 'Ֆայլի հղում',
             dataIndex: ['file', 'fileUrlDirectory'],
             key: 'fileUrlDirectory',
             render: url => <a href={url} target="_blank" rel="noopener noreferrer">{url}</a>
@@ -70,7 +70,7 @@ const Messages = () => {
     }
 
     if (error) {
-        return <Alert message={`Error: ${error}`} type="error" />;
+        return <Alert message={`Հաղորդագրություններ առկա չեն`} type="error" />;
     }
 
     return (

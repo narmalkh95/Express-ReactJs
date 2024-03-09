@@ -50,13 +50,13 @@ const UploadForm = () => {
 
     const onFinish = async () => {
         if (!file || !message) {
-            messageAntd.error('Please select a file and enter a message');
+            messageAntd.error('Խնդրում ենք ընտրել ֆայլ և մուտքագրել հաղորդագրություն');
             return;
         }
         const token = auth.getToken();
         await dispatch(uploadFile(file, message, token));
         if (!error) {
-            messageAntd.success('File uploaded successfully');
+            messageAntd.success('Ֆայլը հաջողությամբ վերբեռնվեց');
 
             setMessage('');
             setFile(null);
@@ -75,8 +75,8 @@ const UploadForm = () => {
             marginTop: '50px',
         }}>
             <Form form={form} layout="vertical" onFinish={onFinish}>
-                <Form.Item name="message" rules={[{ required: true, message: 'Please input your message!' }]}>
-                    <Input.TextArea value={message} onChange={onMessageChange} rows={4} placeholder="Դեր նամակը" maxLength={6} />
+                <Form.Item name="message" rules={[{ required: true, message: 'Խնդրում ենք մուտքագրել ձեր հաղորդագրություն' }]}>
+                    <Input.TextArea value={message} onChange={onMessageChange} rows={4} placeholder="Ձեր նամակը"  />
                 </Form.Item>
                 <Form.Item>
                     <div style={customFileStyle}>
@@ -87,7 +87,7 @@ const UploadForm = () => {
                     </div>
                 </Form.Item>
                 <Form.Item>
-                    <Button type="primary" htmlType="submit" loading={uploading}>Upload</Button>
+                    <Button type="primary" htmlType="submit" loading={uploading}>Վերբեռնել</Button>
                 </Form.Item>
             </Form>
         </Card>

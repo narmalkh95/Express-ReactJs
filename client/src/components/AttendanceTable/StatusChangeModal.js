@@ -126,7 +126,7 @@ const StatusChangeModal = ({isOpen, onCancel, onSuccess, students, dataList, sel
 						disabled={!selectedDate || !selectedLessonId || !selectedStatus}
 						onClick={onFinish}
 					>
-						Submit
+						Ներկայացնել
 					</Button>
 				</Form.Item>
 
@@ -138,7 +138,7 @@ const StatusChangeModal = ({isOpen, onCancel, onSuccess, students, dataList, sel
 					style={{marginLeft: 10}}
 				>
 					<Button type="default" onClick={onCancel}>
-						Cancel
+						Չեղարկել
 					</Button>
 				</Form.Item>
 			</div>

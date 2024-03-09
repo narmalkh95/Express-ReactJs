@@ -260,7 +260,7 @@ const AttendanceTable = () => {
 				{scoreObj !== null && (
 					<div style={{marginLeft: 20}}>
 						{/*<p>Հաշվարկն ըստ {scoreObj.week} շաբաթի</p>*/}
-						<p>Գնահատական - {scoreObj.count}</p>
+						<p>Գործակից - {scoreObj.count}</p>
 						<p>Բացակաների հանրագումար - {scoreObj.absent}</p>
 					</div>
 				)}

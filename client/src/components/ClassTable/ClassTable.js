@@ -14,7 +14,7 @@ const lessonTimes = [
     '14:20 - 15:40'
 ]
 
-const weekDays = [['Monday', 'Երկուշաբթի'], ['Tuesday', 'Երեքշաբթի'], ['Wednesday', 'Չորեքշաբթի'], ['Thursday', 'հինգշաբթի'], ['Friday', 'Ուրբաթ']];
+const weekDays = [['Monday', 'Երկուշաբթի'], ['Tuesday', 'Երեքշաբթի'], ['Wednesday', 'Չորեքշաբթի'], ['Thursday', 'Հինգշաբթի'], ['Friday', 'Ուրբաթ']];
 
 const columns = [
     {

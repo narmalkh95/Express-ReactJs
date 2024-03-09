@@ -42,16 +42,10 @@ router.get('/verify', async (req, res) => {
 			}
 
 			const todaysLessonSchedules = currentGroupLessonSchedules.filter(lesson => lesson.dayOfWeek === availableWeekDays[currentWeekdayName]);
-			//const format = 'hh:mm';
-			//const time = moment(moment().format(format), format);
-			//console.log(time,'time');
-			const date = "01-01-2024";
-			const time2 = "9:35";
+			const format = 'hh:mm';
+			const time = moment(moment().format(format), format);
 
-			const format = 'DD-MM-YYYY HH:mm';
-			const time = moment(date + ' ' + time2, format);
 
-			console.log(todaysLessonSchedules,'todaysLessonSchedules')
 			const exactLesson = todaysLessonSchedules.find(lesson => {
 				const [startH, endH] = lesson.timeSlot.split(' - ');
 				const beforeTime = moment(startH, format);
@@ -61,7 +55,7 @@ router.get('/verify', async (req, res) => {
 			});
 
 			if (!exactLesson) {
-				return res.json('You do not have any lesson for now');
+				res.redirect(`https://6b87-217-113-22-35.ngrok-free.app/error`);
 			}
 
 			const [startH, endH] = exactLesson.timeSlot.split(' - ');
@@ -81,7 +75,7 @@ router.get('/verify', async (req, res) => {
 
 			user.save();
 
-			res.json('You have successfully registered your time');
+
 			res.redirect(`https://6b87-217-113-22-35.ngrok-free.app/thank-you`);
 		})
 		.catch(error => {

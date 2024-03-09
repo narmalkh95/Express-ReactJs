@@ -17,6 +17,7 @@ const classRoutes = require('./routs/classRoutes');
 const attendanceController = require('./controllers/attendanceController');
 const studentsController = require('./controllers/studentsController');
 const messagesController = require('./controllers/messagesController');
+const path = require("path");
 
 app.use('/qr', qrController);
 app.use('/', classController);
@@ -29,6 +30,7 @@ app.use('/messages',messagesController);
 app.post('/login', loginController);
 app.use('/attendance', attendanceController);
 app.use('/students', studentsController);
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
 app.listen(PORT,() => {

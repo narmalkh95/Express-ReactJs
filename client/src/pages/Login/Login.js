@@ -38,14 +38,14 @@ const Login = () => {
     return (
 
         <div className={loginForm}>
-            <h2>Login</h2>
+            <h2>Մուտք</h2>
             <input type="email" className={inputField} placeholder="Email" value={email}
                    onChange={(e) => setEmail(e.target.value)}/>
             <input type="password" className={inputField} placeholder="Password" value={password}
                    onChange={(e) => setPassword(e.target.value)}/>
-            <button className={loginButton} onClick={handleLogin}>Login</button>
-            {isLoading && <p>Loading...</p>}
-            {error && <p>Error: {error.message}</p>}
+            <button className={loginButton} onClick={handleLogin}>Մուտք</button>
+            {isLoading && <p>Բեռնվում է...</p>}
+            {error && <p>Սխալ: {error.message}</p>}
         </div>
 
     );

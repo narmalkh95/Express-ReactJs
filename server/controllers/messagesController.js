@@ -8,12 +8,10 @@ const verifyToken = require("../middleware/authMiddleware");
 // Endpoint to retrieve information about files including user details and file URL directory with pagination
 router.get('/', verifyToken, async (req, res) => {
     try {
-        // Pagination parameters
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 20;
         const skip = (page - 1) * limit;
 
-        // Query the database to fetch files with pagination and populate the userId field to include user details
         const filesPromise = File.find({})
             .populate({
                 path: 'userId',
@@ -31,12 +29,10 @@ router.get('/', verifyToken, async (req, res) => {
             return res.status(404).json({ message: 'Files not found' });
         }
 
-        // Calculate pagination information
         const totalPages = Math.ceil(totalFiles / limit);
 
-        // Construct the response object for each file
         const responseObject = files.map(file => {
-            const fileUrlDirectory = `http://192.168.86.25/uploads/${file.filename}`;
+            const fileUrlDirectory = `http://192.168.86.25/uploads/${file.path}`;
             return {
                 file: {
                     filename: file.filename,
@@ -53,7 +49,6 @@ router.get('/', verifyToken, async (req, res) => {
             };
         });
 
-        // Include pagination information in the response
         const paginationInfo = {
             totalPages: totalPages,
             currentPage: page,

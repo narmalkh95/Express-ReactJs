@@ -11,6 +11,7 @@ import AttendancePage from "../pages/Attendance/AttendancePage";
 import MenuComponent from "../components/Menu/MenuComponent";
 import ClassPage from "../pages/Class/ClassPage";
 import Messages from "../pages/Messages/Messages";
+import ErrorPage from "../pages/ErrorPage/ErrorPage";
 
 const AppRouter = () => {
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -29,6 +30,7 @@ const AppRouter = () => {
                     element={isAuthenticated ? <Navigate to="/dashboard" replace/> : <Login/>}
                 />
                 <Route path="/thank-you" element={<ThankYouPage/>}/>
+                <Route path="/error" element={<ErrorPage/>}/>
                 <Route exact path='/dashboard' element={
                     <PrivateRoute
                         children={
