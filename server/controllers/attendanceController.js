@@ -48,7 +48,7 @@ router.get('/',
 			// 	})
 
 			const groups = await Group.find({}).populate('lessonSchedule.classType').populate('lessonSchedule.room').populate('lessonSchedule.teacher');
-			res.json({groups, attendanceList: user.attendanceList, userLessonIds: user.lessons});
+			res.json({groups, attendanceList: user.attendanceList, userLessonIds: user.lessons, userId});
 		}).catch(err => {
 			console.log(err)
 			res.status(500).json(err)

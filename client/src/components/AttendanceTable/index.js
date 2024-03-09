@@ -70,6 +70,9 @@ const AttendanceTable = () => {
 			fetch(`${SERVER_HOST_IP}/attendance?studentId=${selectedStudent}`, {headers: {Authorization: token}}).then(res => res.json()).then(val => {
 				setDataList(val)
 				calcWeekScore(val, selectedStudent)
+				if(isStudentRole) {
+					setSelectedStudent(val.userId);
+				}
 			}).finally(() => {
 				setIsLoading(false)
 			})
