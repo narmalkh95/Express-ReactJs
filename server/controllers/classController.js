@@ -43,7 +43,9 @@ router.get('/class',
 });
 
 router.get('/class/params', verifyToken, (req, res, next) => hasRole(req, res, next, [ROLES.ADMIN]), (req, res) => {
-	getClassCreateParams().then(val => res.json(val)).catch(err => res.status(500).json(err))
+	getClassCreateParams().then(val => {
+		res.json(val)
+	}).catch(err => res.status(500).json(err))
 })
 
 // Update class

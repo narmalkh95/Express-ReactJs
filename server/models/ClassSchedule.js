@@ -58,7 +58,9 @@ const getClassCreateParams = async() => {
     const roles = await Role.find({});
     const rolesObj = {};
     roles.map(i => {rolesObj[i.name] = i.id})
-    const teachers = await User.find({role: rolesObj[ROLES.ADMIN]}).populate();
+    const teachers = await User.find({ role: rolesObj[ROLES.ADMIN], username: { $ne: 'fakeuser' } })
+        .populate();
+
 
     return {
         group: group.map(i => {
