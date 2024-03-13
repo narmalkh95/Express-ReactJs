@@ -20,7 +20,7 @@ const CreateNewLesson = ({isOpen, onCancel, getLessons}) => {
 	useEffect(() => {
 		const token = auth.getToken();
 		fetch(`${SERVER_HOST_IP}/class/params`, {headers: {Authorization: token}}).then(res => res.json()).then(val => {
-			setParams(val)
+ 			setParams(val)
 		})
 	}, []);
 

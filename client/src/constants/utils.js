@@ -4,7 +4,7 @@ const availableWeekDays = {
 	monday: 'Երկուշաբթի',
 	tuesday: 'Երեքշաբթի',
 	wednesday: 'Չորեքշաբթի',
-	thursday: 'հինգշաբթի',
+	thursday: 'Հինգշաբթի',
 	friday: 'Ուրբաթ',
 };
 
