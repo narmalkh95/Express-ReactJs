@@ -21,19 +21,24 @@ router.get('/verify', async (req, res) => {
 		return res.status(401).json({message: 'Invalid username'});
 	}
 
-	const currentWeekdayName = 'monday';// moment().format('dddd').toLowerCase();
+	const currentWeekdayName = moment().format('dddd').toLowerCase();
 
 	Group.find({})
 		.populate('lessonSchedule.classType')
 		.populate('lessonSchedule.room')
 		.populate('lessonSchedule.teacher')
 		.then(groups => {
-			// Filter groups where the user is a student
-			const currentGroup = groups.find(group => group.students.includes(decoded.userId));
+			if (!decoded || !decoded.userId) {
+				return res.json('User ID is not available');
+			}
+
+			const currentGroup = groups.find(group => group.students && group.students.includes(decoded.userId));
 
 			if (!currentGroup) {
 				return res.json('You are not enrolled in any groups');
 			}
+
+			console.log(currentGroup,'currentGroup');
 
 			const currentGroupLessonSchedules = currentGroup.lessonSchedule;
 
@@ -45,7 +50,6 @@ router.get('/verify', async (req, res) => {
 			const format = 'hh:mm';
 			const time = moment(moment().format(format), format);
 
-
 			const exactLesson = todaysLessonSchedules.find(lesson => {
 				const [startH, endH] = lesson.timeSlot.split(' - ');
 				const beforeTime = moment(startH, format);
@@ -55,7 +59,7 @@ router.get('/verify', async (req, res) => {
 			});
 
 			if (!exactLesson) {
-				res.redirect(`https://6b87-217-113-22-35.ngrok-free.app/error`);
+				return res.redirect(`https://6b87-217-113-22-35.ngrok-free.app/error`);
 			}
 
 			const [startH, endH] = exactLesson.timeSlot.split(' - ');
@@ -66,17 +70,17 @@ router.get('/verify', async (req, res) => {
 
 			const status = minutesDifference < 10 ? attendanceStatus.inTime : attendanceStatus.late;
 
-			user.attendanceList.push({
+ 			user.attendanceList.push({
 				date: moment().format('DD-MM-YYYY'),
 				timeSlot: exactLesson.timeSlot,
 				status: status,
-				classType: exactLesson.classType?.name // Ensure classType exists before accessing its name
+				classType: exactLesson.classType?.name
 			});
 
-			user.save();
-
-
-			res.redirect(`https://6b87-217-113-22-35.ngrok-free.app/thank-you`);
+ 			return user.save();
+		})
+		.then(() => {
+ 			res.redirect(`https://6b87-217-113-22-35.ngrok-free.app/thank-you`);
 		})
 		.catch(error => {
 			console.error('Error:', error);

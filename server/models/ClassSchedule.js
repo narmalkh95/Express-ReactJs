@@ -36,10 +36,15 @@ async function getClassSchedule() {
                     // students: studentNames,
                 };
 
-                if (schedule?.[dayOfWeek]?.[timeSlot]) {
+                // Check if schedule[dayOfWeek] is defined, initialize it if not
+                if (!schedule[dayOfWeek]) {
+                    schedule[dayOfWeek] = {};
+                }
+
+                if (schedule[dayOfWeek][timeSlot]) {
                     schedule[dayOfWeek][timeSlot].push(obj)
                 } else {
-                    schedule[dayOfWeek][timeSlot] = [obj]
+                    schedule[dayOfWeek][timeSlot]= [obj]
                 }
             });
         });

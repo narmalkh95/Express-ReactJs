@@ -5,7 +5,7 @@ const cors = require('cors');
 app.use(express.json());
 app.use(cors())
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8081;
 
 require('./db');
 
@@ -33,6 +33,6 @@ app.use('/students', studentsController);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
-app.listen(PORT,() => {
+app.listen(PORT,'192.168.86.63',() => {
     console.log(`Server is listening on port ${PORT}`);
 });
