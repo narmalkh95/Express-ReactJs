@@ -35,15 +35,18 @@ router.get('/verify', async (req, res) => {
 			const currentGroup = groups.find(group => group.students && group.students.includes(decoded.userId));
 
 			if (!currentGroup) {
-				return res.json('You are not enrolled in any groups');
+				const errorMesasge = 'Դուք այսօր դաս չունեք'
+				return res.redirect(`http://${HOST}:3000/error?error=${errorMesasge}`);
+
 			}
 
-			console.log(currentGroup,'currentGroup');
 
 			const currentGroupLessonSchedules = currentGroup.lessonSchedule;
 
 			if (!currentGroupLessonSchedules || !Array.isArray(currentGroupLessonSchedules) || currentGroupLessonSchedules.length === 0) {
-				return res.json('There are no lesson schedules available');
+				const errorMesasge = 'Դասեր առկա չէ այս ժամին'
+				return res.redirect(`http://${HOST}:3000/error?error=${errorMesasge}`);
+
 			}
 
 			const todaysLessonSchedules = currentGroupLessonSchedules.filter(lesson => lesson.dayOfWeek === availableWeekDays[currentWeekdayName]);
@@ -59,7 +62,8 @@ router.get('/verify', async (req, res) => {
 			});
 
 			if (!exactLesson) {
-				return res.redirect(`https://6b87-217-113-22-35.ngrok-free.app/error`);
+				const errorMesasge = 'Դուք առայժմ դասեր չունեք!'
+				return res.redirect(`http://${HOST}:3000/error?error=${errorMesasge}`);
 			}
 
 			const [startH, endH] = exactLesson.timeSlot.split(' - ');
@@ -80,7 +84,7 @@ router.get('/verify', async (req, res) => {
  			return user.save();
 		})
 		.then(() => {
- 			res.redirect(`https://6b87-217-113-22-35.ngrok-free.app/thank-you`);
+			res.redirect(`http://${HOST}:3000/thank-you`);
 		})
 		.catch(error => {
 			console.error('Error:', error);
@@ -88,7 +92,6 @@ router.get('/verify', async (req, res) => {
 		});
 
 
-	///res.redirect(`http://${HOST}:3000/thank-you`);
-});
+ });
 
 module.exports = router;
