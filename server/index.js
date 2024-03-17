@@ -33,6 +33,6 @@ app.use('/students', studentsController);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
-app.listen(PORT,'192.168.0.105',() => {
+app.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}`);
 });

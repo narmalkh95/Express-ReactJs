@@ -89,6 +89,8 @@ async function generateMockData() {
             { username: 'Սահակյան Լուսինե Գնելի', email: 'sahakyan_lusine018@polytechnic.am', role: rolesObj[ROLES.STUDENT], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
             { username: 'Վարդանյան Տաթև Գեղամի', email: 'vardanyan_tatev018@polytechnic.am', role: rolesObj[ROLES.STUDENT], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
             { username: 'Վարդանյան Նարեկ Հրանտի', email: 'vardanyan_narek018@polytechnic.am', role: rolesObj[ROLES.STUDENT], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
+            { username: 'Անի Մանուկյան Հրանտի', email: 'animanukyan_prof@polytechnic.am', role: rolesObj[ROLES.STUDENT], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
+            { username: 'Հարությունյան Լևոն Հրանտի', email: 'harutyunyanlevon_prof@polytechnic.am', role: rolesObj[ROLES.STUDENT], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
         ];
 
         const students = await User.insertMany(studentsArr);

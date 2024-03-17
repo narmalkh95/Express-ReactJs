@@ -129,12 +129,7 @@ const AttendanceTable = () => {
 			}
 		})
 
-		const lengthOfLessonGroups = Object.keys(weeklyLessonScheduleByGroupName).length;
-
-		setScoreObj({
-			count: Math.floor(Object.values(groupedCountShouldBePresent).reduce((prev, current) => prev + current.score, 0) / lengthOfLessonGroups),
-			absent: Object.values(groupedCountShouldBePresent).reduce((prev, current) => prev + current.absentCount, 0)
-		});
+		setScoreObj(groupedCountShouldBePresent);
 	}, [])
 
 	const dateCellRender = (value) => {
@@ -259,12 +254,24 @@ const AttendanceTable = () => {
 						Փոխել կարգավիճակը
 					</Button>
 				)}
+			</div>
 
+			<div>
 				{scoreObj !== null && (
-					<div style={{marginLeft: 20}}>
-						{/*<p>Հաշվարկն ըստ {scoreObj.week} շաբաթի</p>*/}
-						<p>Գործակից - {scoreObj.count}</p>
-						<p>Բացակաների հանրագումար - {scoreObj.absent}</p>
+					<div style={{width: '100%', flexWrap: 'wrap', display: 'flex', marginTop: 20}}>
+						{Object.keys(scoreObj).map(key => {
+							return (
+								<div style={{display: 'flex', alignItems: 'center', minWidth: '20%', maxWidth: '20%'}}>
+									<div>
+										<p style={{fontWeight: 'bold', minWidth: 100, textAlign: 'center', textTransform: 'capitalize'}}>{key}</p>
+									</div>
+									<div>
+										<p>Գործակից - {scoreObj[key].score}</p>
+										<p>Բացակա - {scoreObj[key].absentCount}</p>
+									</div>
+								</div>
+							)
+						})}
 					</div>
 				)}
 			</div>
