@@ -19,7 +19,7 @@ const StatusChangeModal = ({isOpen, onCancel, onSuccess, students, dataList, sel
 				dataList.groups.forEach(group => {
 					const item = group.lessonSchedule.find(l => l._id === i.lessonId);
 					if (item) {
-						filteredAttendanceList[index].groupName = item.groupName;
+						filteredAttendanceList[index].groupName = group.shortName;
 						filteredAttendanceList[index].classType = item.classType.name;
 					}
 				})
@@ -32,7 +32,6 @@ const StatusChangeModal = ({isOpen, onCancel, onSuccess, students, dataList, sel
 
 		return []
 	}, [selectedDate, students]);
-
 	const onFinish = () => {
 		try {
 			const obj = {selectedStatus, selectedLessonId, selectedDate, selectedStudentId: selectedStudent}

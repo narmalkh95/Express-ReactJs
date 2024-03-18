@@ -20,6 +20,9 @@ const CreateNewLesson = ({isOpen, onCancel, getLessons}) => {
 	useEffect(() => {
 		const token = auth.getToken();
 		fetch(`${SERVER_HOST_IP}/class/params`, {headers: {Authorization: token}}).then(res => res.json()).then(val => {
+			val.group.forEach(i => {
+				i.label = i.label.split(' ').map( w =>  w.substring(0,1).toUpperCase()+ w.substring(1)).join(' ')
+			})
  			setParams(val)
 		})
 	}, []);

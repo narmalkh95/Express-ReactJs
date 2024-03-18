@@ -50,6 +50,8 @@ async function generateMockData() {
             { username: 'Մարկոսյան Մ.', email: 'test@polytechnic.am12', role: rolesObj[ROLES.ADMIN], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
             { username: 'Սարգսյան Ս.', email: 'test@polytechnic.am13', role: rolesObj[ROLES.ADMIN], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
             { username: 'Ղազարյան Մ.', email: 'test@polytechnic.am14', role: rolesObj[ROLES.ADMIN], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
+            { username: 'Մանուկյան Մ.', email: 'animanukyan_prof@polytechnic.am', role: rolesObj[ROLES.ADMIN], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
+            { username: 'Հարությունյան Լ.', email: 'harutyunyanlevon_prof@polytechnic.am', role: rolesObj[ROLES.ADMIN], password: '$2b$10$IL6RvEYBOKmDTxJg.yBOae6EHKV762b4R7pXdpwi55Rru7oT94Uq6' },
         ];
 
         const teachers = await User.insertMany(teachersArr);
